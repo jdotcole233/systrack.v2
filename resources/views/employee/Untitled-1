@@ -1,0 +1,20 @@
+
+
+
+
+
+
+
+
+                 <tr id="tab{{$my_job->job_assignment_id}}">
+                                            
+                                            {{-- <td style="display: none;" id="job_request_id_de">{{$my_job->job_request_id}}</td> --}}
+                                            
+
+                                            {{--<td id="company_email" style="display: none;">{{DB::table('clients')->join('job__requests','clients.client_id','=','job__requests.client_id')->where('job_request_id',$my_job->job_request_id)->where('clients.delete_status', 'NOT DELETED')->value('email')}}</td>--}}
+                                          
+                                            {{-- <!-- <td id="assignment_status">{{$my_job->assignment_status}}</td> This use to be at Applicant column--> --}}
+                                            {{-- <td id="assignment_status">{{ json_decode(DB::table('job__requests')->where('job_request_id', $my_job->job_request_id)->where('delete_status', 'NOT DELETED')->value('details'))->{"COMPANY NAME"} }}</td> <!-- This was changed to add the applicant name instead of job status --> --}}
+                                            
+                                            
+                                        </tr>
