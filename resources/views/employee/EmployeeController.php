@@ -2,18 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{
-    Job_Assignment,
-    Job_Task_Completion,
-    Job_Completion,
-    Activity,
-    Contact,
-    Job_Request,
-    Task,
-    Client,
-    Job,
-    Employee,
-};
+use App\Models\{Job_Assignment, Job_Task_Completion, Job_Completion, Activity, Contact, Job_Request, Task, Client};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\{Auth, DB, Response, View};
 use Carbon\Carbon;
@@ -135,17 +124,12 @@ class EmployeeController extends Controller
 
     public function viewJobRequests($user)
     {
-        $job_requests = Job_Request::join('jobs', 'job__requests.job_id', 'jobs.job_id')
-            ->where('jobs.delete_status', 'NOT DELETED')
-            ->where('job__requests.delete_status', 'NOT DELETED')
-            ->select('job__requests.*')
-            ->orderBy('job__requests.created_at', 'DESC')
-            ->get();
+        $job_requests = Job_Request::join('jobs', 'job__requests.job_id', 'jobs.job_id')->where('jobs.delete_status', 'NOT DELETED')->where('job__requests.delete_status', 'NOT DELETED')->select('job__requests.*')->get();
         // dd($job_requests);
         $clients = Client::all()->where('delete_status', 'NOT DELETED');
         $jobs = Job::all()->where('delete_status', 'NOT DELETED');
         $employees = Employee::where('position', '<>', 'Accountant')->where('delete_status', 'NOT DELETED')->get();
-        return view('employee.jobs_template', compact('jobs', 'clients', 'job_requests', 'employees', 'user'));
+        return view('employee.jobs', compact('jobs', 'clients', 'job_requests', 'employees', 'user'));
     }
 
     //    public function viewJobAssignments () {

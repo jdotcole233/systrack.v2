@@ -119,6 +119,16 @@ Route::prefix('employee')->group(function () {
     Route::post('/client_delete_information/{id}', [EmployeeController::class, 'firmus_client_delete']);
 });
 
+Route::prefix('employee-jobs')->group(function () {
+    Route::get('/{user?}', [EmployeeController::class, 'viewJobRequests']);
+    Route::post('/add/{user?}', [EmployeeController::class, 'addJobRequest'])->name('addJobRequest');
+    Route::post('/edit/{user?}', [EmployeeController::class, 'editJobRequest'])->name('editJobRequest');
+    Route::post('/delete/{user?}', [EmployeeController::class, 'deleteJobRequest'])->name('deleteJobRequest');
+    Route::post('/assign/{user?}', [EmployeeController::class, 'job_make_assignment']);
+    Route::get('/details/{user?}/{id?}', [EmployeeController::class, 'viewJobDetails']);
+    Route::get('/assign_retrieve_information/{id}', [EmployeeController::class, 'job_assign_retrieve']);
+});
+
 // Finance Officer Routes
 Route::prefix('finance')->group(function () {
     Route::get('/home/{user}', [FinanceController::class, 'financeIndex']);

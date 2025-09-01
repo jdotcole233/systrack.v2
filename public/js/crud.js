@@ -442,8 +442,14 @@ $('.deleteJob').on('click', function (e) {
 
 $('#submit_job_request').on('click', function (e) {
     e.preventDefault();
-    parses('details');
+    const pathname = window.location.pathname;
+    let url = '/manager-jobs/add';
 
+    if (pathname.includes('/employee-jobs/employee')) {
+        url = '/employee-jobs/add'
+    }
+
+    parses('details');
     var info = JSON.parse($('#jobsMenu').val());
 
     // document.getElementById('jobsMenu').options[document.getElementById('jobsMenu').selectedIndex].value = info.job_id;
@@ -467,7 +473,7 @@ $('#submit_job_request').on('click', function (e) {
                     $.ajax( {
                         method : 'post',
                         data  : $('#job_request_form').serialize(),
-                        url  : '/manager-jobs_add',
+                        url  : url,
                         success : function (data) {
                              $('#loading_progress').modal('hide');
                             swal({title : "Firmus Job Request", text : "Job Request Made Successfully", icon : 'success'});
@@ -2051,7 +2057,7 @@ function getNotification () {
     $.ajax({
         method: 'GET',
         dataType: 'json',
-        url : '/getNotification',
+        url : '/notification/get',
         success : function(data){
             // console.log(data);
             $('#messages_notifications').html(data);
@@ -2167,7 +2173,8 @@ function countNotification () {
     $.ajax({
         method: 'GET',
         dataType: 'json',
-        url : '/countNotification',
+        url : '/notification/count',
+        // url : '/countNotification',
         success : function(data){
             $('#countNotification').text(data.count);
             $('#countNotificationbadge').text(data.count);
@@ -2306,20 +2313,20 @@ if(timeoutCheck === "success"){
 }
 
 
-function renewalNotification(){
-  $.ajax({
-    method: "GET",
-    dataType:"JSON",
-    url: "/sendReminder",
-    success: function (data){
-      timeoutCheck = data.success;
-      console.log("getting Reminder Notification");
-    },
-    error: function(e){
-      console.log("Error in getting REMINDER Notification");
-    }
-  });
-}
+// function renewalNotification(){
+//   $.ajax({
+//     method: "GET",
+//     dataType:"JSON",
+//     url: "/address-book/sendReminder",
+//     success: function (data){
+//       timeoutCheck = data.success;
+//       console.log("getting Reminder Notification");
+//     },
+//     error: function(e){
+//       console.log("Error in getting REMINDER Notification");
+//     }
+//   });
+// }
 
 let dt = $('#exampletable').DataTable();
 

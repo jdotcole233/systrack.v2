@@ -1,5 +1,5 @@
-@extends('partner.manager.manager-template')
-@section('manager')
+@extends('employee.my-jobs-template')
+@section('employee')
 <div class="container">
                         <div class="row">
                             <div class="col-xs-12">
@@ -25,10 +25,6 @@
                             <div class="col-md-12">
                                 <button class="btn-rounded btn-inverse waves-effect waves-light m-b-5 pull-right" data-toggle="modal" id="add_job_gen" data-target="#con-close-modal" > <i class="fa fa-plus-circle m-r-5"></i> <span>Add Job Request</span> </button>
                             </div>
-
-
-
-
                             <style type="text/css">
                                 table tr:hover{
                                     cursor: pointer;

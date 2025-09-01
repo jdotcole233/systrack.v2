@@ -21,12 +21,10 @@ class ManagerMiddleware
     {
 
 
-        if(Auth::check()){
-            $position = DB::table('employees')->select('position')->where('emp_id',Auth::user()->emp_id)->first();
-
-            // dd($position);
-
-            if($position->position != 'Manager' && $position->position != 'Partner') {
+        if (Auth::check()) {
+            $position = DB::table('employees')->select('position')->where('emp_id', Auth::user()->emp_id)->first();
+            if ($position->position != 'Manager' && $position->position != 'Partner') 
+            {
                 Auth::logout();
                 Session::flush();
                 return Redirect::to('/');
@@ -34,6 +32,9 @@ class ManagerMiddleware
                 return $next($request);
             }
         }
+
+        //  return $next($request);
+        return Redirect::to('/login');
 
     }
 }

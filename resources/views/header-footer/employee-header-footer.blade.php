@@ -211,6 +211,9 @@
                                 <a href="{{ url('/employee/home') }}" class="waves-effect"><i class="mdi mdi-view-dashboard"></i><span id="countNotification" class="label label-success pull-right">0</span> <span> Home </span> </a>
 
                             </li>
+                            <li>
+                                <a href="{{ url('/employee-jobs/employee') }}" class="waves-effect"><i class="mdi mdi-layers"></i><span> Jobs </span></a>
+                            </li>
 
                             <li>
                                 <a href="{{ url('/employee/jobs/employee') }}" class="waves-effect"><i class="fa fa-users"></i><span> My Jobs </span></a>

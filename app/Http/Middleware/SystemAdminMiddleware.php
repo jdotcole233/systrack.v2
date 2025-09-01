@@ -21,9 +21,6 @@ class SystemAdminMiddleware
     {
         if(Auth::check()){
             $position = DB::table('employees')->select('position')->where('emp_id',Auth::user()->emp_id)->first();
-
-            // dd($position);
-
             if($position->position != 'System Administrator' && $position->position != 'Partner') {
                 Auth::logout();
                 Session::flush();
@@ -32,5 +29,8 @@ class SystemAdminMiddleware
                 return $next($request);
             }
         }
+
+        //  return $next($request);
+        return Redirect::to('/login');
     }
 }

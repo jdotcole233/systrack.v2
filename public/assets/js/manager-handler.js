@@ -139,6 +139,7 @@
 	$('#datatable-buttons').on('click','.client_edit_info',function(e){
 
 		 client_id = $(this).attr('value');
+		//  console.log(client_id)
 
 		var url = '/client_edit_get_information/' + client_id;
 

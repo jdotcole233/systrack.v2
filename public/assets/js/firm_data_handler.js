@@ -17,9 +17,11 @@ $('table').on("click",".edit_btn",function(){
 		 $('.update_changes').show();
 		 $('.reset_password').show();
 		 individual_id = $(this).attr('value');
-		 var url = "/employee_in_update_record/" + individual_id;
+		 console.log(individual_id);
+		 var url = "/admin/employee_in_update_record/" + individual_id;
+		 console.log(url)
 
-		$.get(url,function(data){
+		$.get(url,function(data) {
 			$('#field-1').val(data.first_name);
 			$('#field-2').val(data.other_name);
 			$('#field-3').val(data.last_name);
@@ -146,7 +148,7 @@ $('.reset_password').click(function(){
 
 	$('table').on("click",".employee_delete_info",function(e){
 		var employee_del_id = $(this).attr('value');
-		var url_delete = '/employee_delete_information/' + employee_del_id;
+		var url_delete = '/admin/employee_delete_information/' + employee_del_id;
 
 		swal({
 			  title: "Are you sure?",
