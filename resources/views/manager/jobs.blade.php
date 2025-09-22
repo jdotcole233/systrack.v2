@@ -62,7 +62,7 @@
                                                             </div>
                                                             <div class="col-md-4" style="display: none">
                                                                 <div class="form-group">
-                                                                    <input name="status" type="hidden" class="form-control" id="field-1" value="PENDING" >
+                                                                    <input name="status" type="hidden" class="form-control" id="field-1" value="PREFINANCED" >
                                                                 </div>
                                                             </div>
                                                             <div class="col-md-8">
@@ -89,10 +89,10 @@
                                                                 <div class="form-group">
                                                                     <label for="field-2" class="control-label">Job Priority</label>
                                                                     <select  name="job_priority" class="form-control" id="jobsMenu">
+                                                                        <option value="LOW">Low</option>    
                                                                         <option value="MEDIUM">Medium</option>
-                                                                        <option value="VERY HIGH">Very High</option>
                                                                         <option value="HIGH">High</option>
-                                                                        <option value="LOW">Low</option>
+                                                                        <option value="VERY HIGH">Very High</option>
                                                                     </select>
                                                                 </div>
                                                             </div>

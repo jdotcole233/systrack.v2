@@ -119,7 +119,7 @@
             <div class="card-box table-responsive">
                 <h4 class="m-t-0 header-title"><b>All Job Types</b></h4>
                 <p class="text-muted font-13 m-b-30">
-
+                    Create a job template
                 </p>
 
                 <table id="datatable-buttons" class="table table-striped table-bordered">

@@ -125,7 +125,7 @@ Route::prefix('employee-jobs')->group(function () {
     Route::post('/edit/{user?}', [EmployeeController::class, 'editJobRequest'])->name('editJobRequest');
     Route::post('/delete/{user?}', [EmployeeController::class, 'deleteJobRequest'])->name('deleteJobRequest');
     Route::post('/assign/{user?}', [EmployeeController::class, 'job_make_assignment']);
-    Route::get('/details/{user?}/{id?}', [EmployeeController::class, 'viewJobDetails']);
+    Route::get('/details/{id?}', [EmployeeController::class, 'viewJobDetails']);
     Route::get('/assign_retrieve_information/{id}', [EmployeeController::class, 'job_assign_retrieve']);
 });
 

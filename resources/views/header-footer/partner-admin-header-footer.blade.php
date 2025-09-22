@@ -215,7 +215,7 @@
                             </li>
 
                             <li>
-                                <a href="{{ url('/admin/jobs/partner-admin') }}" class="waves-effect"><i class="fa fa-line-chart"></i><span> Jobs </span></a>
+                                <a href="{{ url('/admin/jobs/partner-admin') }}" class="waves-effect"><i class="fa fa-line-chart"></i><span> Jobs Template </span></a>
                             </li>
 
 

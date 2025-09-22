@@ -212,11 +212,11 @@
 
                             </li>
                             <li>
-                                <a href="{{ url('/employee-jobs/employee') }}" class="waves-effect"><i class="mdi mdi-layers"></i><span> Jobs </span></a>
+                                <a href="{{ url('/employee-jobs/employee') }}" class="waves-effect"><i class="mdi mdi-layers"></i><span> Job Requests </span></a>
                             </li>
 
                             <li>
-                                <a href="{{ url('/employee/jobs/employee') }}" class="waves-effect"><i class="fa fa-users"></i><span> My Jobs </span></a>
+                                <a href="{{ url('/employee/jobs/employee') }}" class="waves-effect"><i class="fa fa-users"></i><span> Assigned Jobs </span></a>
                             </li>
                             <li>
                                 <a href="{{ url('/employee/clients/employee') }}" class="waves-effect"><i class="fa fa-users"></i><span> Clients </span></a>

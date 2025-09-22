@@ -224,6 +224,7 @@ class EmployeeController extends Controller
 
     public function viewJobDetails($id)
     {
+        info("Job details id ". json_encode($id));
         $job = Job_Request::where('job_request_id', $id)->first();
         $employees = Job_Assignment::where('job_request_id', $id)->get();
         return Response::json(View::make('employee.job_details', array('job' => $job, 'employees' => $employees))->render());

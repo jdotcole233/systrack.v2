@@ -111,7 +111,6 @@ class EmployeeController extends Controller
     {
         //Client::where('client_id',$id)->update($request->except('_token'));
         $client_e_info = DB::table('clients')->select('*')->where('client_id', $id)->where('delete_status', 'NOT DELETED')->first();
-
         return response()->json($client_e_info);
     }
 

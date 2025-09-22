@@ -227,7 +227,7 @@
                             </li>
 
                             <li>
-                                <a href="{{ url('/admin-jobs/admin') }}" class="waves-effect"><i class="fa fa-line-chart"></i><span> Jobs </span></a>
+                                <a href="{{ url('/admin-jobs/admin') }}" class="waves-effect"><i class="fa fa-line-chart"></i><span> Jobs Template </span></a>
                             </li>
                             <li><a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();

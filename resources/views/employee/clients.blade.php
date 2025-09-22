@@ -435,6 +435,17 @@
                                                 </select>
                                             </div>
                                         </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="field-3" class="control-label">Status</label>
+                                                <select name="status" id="status_check" class="form-control" required>
+                                                    <option value="null" title="">--Set status--</option>
+                                                    <option value="ACTIVE" title="ACTIVE">ACTIVE</option>
+                                                    <option value="INACTIVE" title="INACTIVE">INACTIVE</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                     </div>
 
                             </div>
@@ -464,11 +475,11 @@
                 <div class="card-box">
                     <h4 class="header-title m-t-0 m-b-30">New Clients</h4>
 
-                    <div class="table-responsivee">
-                        <table class="table table table-hover m-0">
+                    <div class="table-responsive">
+                        <table class="table  table-hover m-0">
                             <thead>
                                 <tr>
-                                    <th></th>
+                                    <th>Abr</th>
                                     <th>Full Name</th>
                                     <th>Phone</th>
                                     <th>Location</th>
@@ -516,6 +527,7 @@
                                     <th>Phone</th>
                                     <th>Nationality</th>
                                     <th>Location</th>
+                                    <th>Status</th>
                                     <th>Edit</th>
                                     <th>Delete</th>
                                 </tr>
@@ -530,6 +542,10 @@
                                         <td>{{$client->phone_number}}</td>
                                         <td>{{$client->nationality}}</td>
                                         <td>{{$client->location}}</td>
+                                        <td>
+                                            <span
+                                                class="badge {{ $client->status == 'ACTIVE' ? 'badge-success' : 'badge-danger' }} ">{{$client->status}}</span>
+                                        </td>
                                         <td><a class="btn btn-primary client_edit_info" value="{{$client->client_id}}">Edit</a>
                                         </td>
                                         <td><a class="btn btn-danger client_delete_info"

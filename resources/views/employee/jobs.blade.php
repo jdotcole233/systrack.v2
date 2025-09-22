@@ -176,7 +176,7 @@
                                                 </div>
                                                 <div class="row">
                                                     <div style="width: 500px"></div>
-                                                    <div class="containerr" style="margin: 0;">
+                                                    <div class="container" style="margin: 0; display: flex; justify-content: center; align-items: center; padding-top: 5px;">
                                                         <ul id="stages" class="progressbar">
                                                         </ul>
                                                     </div>
@@ -189,8 +189,6 @@
                                                         <form id="job_assignment_form" >
                                                             <div class="col-md-12">
                                                                 {{--</div>--}}
-
-
                                                                 <div class="col-md-4">
                                                                     <div class="form-group">
                                                                         <label for="field-1" class="control-label">Reference No</label>

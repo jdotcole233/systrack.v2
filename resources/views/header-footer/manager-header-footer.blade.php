@@ -216,11 +216,11 @@
                             </li>
 
                             <li>
-                                <a href="{{ url('/manager-jobs/manager') }}" class="waves-effect"><i class="mdi mdi-layers"></i><span> Jobs </span></a>
+                                <a href="{{ url('/manager-jobs/manager') }}" class="waves-effect"><i class="mdi mdi-layers"></i><span> Job Requests </span></a>
                             </li>
 
                             <li>
-                                <a href="{{ url('/manager-my-jobs/manager') }}" class="waves-effect"><i class="mdi mdi-layers"></i><span> My Jobs </span></a>
+                                <a href="{{ url('/manager-my-jobs/manager') }}" class="waves-effect"><i class="mdi mdi-layers"></i><span> Assigned Jobs </span></a>
                             </li>
 
                             <li>
