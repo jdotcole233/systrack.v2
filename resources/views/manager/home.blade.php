@@ -91,7 +91,7 @@
 
                         <div class="row">
                             <div class="col-lg-4">
-                        		<div class="card-box">
+                        		<!-- <div class="card-box">
 
                         			<h4 class="header-title m-t-0">Job Delivery</h4>
 
@@ -110,23 +110,24 @@
 
                                         </ul>
                                 	</div>
-                        		</div>
-                            </div><!-- end col -->
+                        		</div> -->
+                            </div>
+                            <!-- end col -->
 
                             <div class="col-lg-4">
-                                <div class="card-box">
+                                <!-- <div class="card-box">
 
                                     <h4 class="header-title m-t-0">Statistics</h4>
                                     <div id="morris-bar-example" style="height: 280px;"></div>
-                                </div>
+                                </div> -->
                             </div><!-- end col -->
 
                             <div class="col-lg-4">
-                                <div class="card-box">
+                                <!-- <div class="card-box">
 
                                     <h4 class="header-title m-t-0">Total Revenue This Month</h4>
                                     <div id="morris-line-example" style="height: 280px;"></div>
-                                </div>
+                                </div> -->
                             </div><!-- end col -->
 
                         </div>

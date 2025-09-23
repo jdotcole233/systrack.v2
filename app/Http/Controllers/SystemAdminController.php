@@ -156,7 +156,7 @@ class SystemAdminController extends Controller
 
     public function adminWebStats($user)
     {
-        $user_activity = Activity::where('delete_status', 'NOT DELETED')->get();
+        $user_activity = Activity::where('delete_status', 'NOT DELETED')->orderBy('created_at', 'desc')->get();
         return view('admin.firmus-web-stats', compact('user', 'user_activity'));
     }
 

@@ -88,15 +88,15 @@
 
         <div class="row">
             <div class="col-lg-6">
-                <div class="card-box">
+                <!-- <div class="card-box">
                     <h4 class="header-title m-t-0 m-b-30">Work Analytics</h4>
 
                     <div id="website-stats" style="height: 320px;" class="flot-chart"></div>
-                </div>
+                </div> -->
             </div>
 
             <div class="col-lg-6">
-                <div class="card-box">
+                <!-- <div class="card-box">
                     <h4 class="header-title m-t-0">Job Delivery</h4>
 
                     <div class="pull-right m-b-30">
@@ -115,7 +115,7 @@
                     <p class="text-muted m-b-0 m-t-15 font-13 text-overflow">Pie chart is used to see the proprotion of each
                         data groups, making Flot pie chart is pretty simple, in order to make pie chart you have to incldue
                         jquery.flot.pie.js plugin.</p>
-                </div>
+                </div> -->
             </div>
 
         </div>
@@ -129,7 +129,7 @@
 
         <div class="row">
             <!-- INBOX -->
-            <div class="col-lg-6">
+            <div class="col-lg-12">
                 <div class="card-box">
                     <h4 class="header-title m-t-0 m-b-30">Messages
                         <button type="button" class="btn btn-danger clearAllMessages" style="float:right"

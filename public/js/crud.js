@@ -2634,74 +2634,74 @@ function renewalNotification(){
 
 let dt = $("#exampletable").DataTable();
 
-$("#generate_report").click(function () {
-    console.log("Reporting...")
-    let job_selected = $("#job_selection_box").val();
-    let job_name_selected = $("#job_selection_box").text();
-    let from_date = $("#from_date").val();
-    let to_date = $("#to_date").val();
+// $("#generate_report").click(function () {
+//     console.log("Reporting...")
+//     let job_selected = $("#job_selection_box").val();
+//     let job_name_selected = $("#job_selection_box").text();
+//     let from_date = $("#from_date").val();
+//     let to_date = $("#to_date").val();
 
-    if (job_selected == "SJ" || from_date == "" || to_date == "") {
-        $("#job_selection_box").css("border", "1px solid red");
-        $("#from_date").css("border", "1px solid red");
-        $("#to_date").css("border", "1px solid red");
-        swal({
-            title: "Error",
-            text: "Check Mandatory field",
-            icon: "warning",
-        });
-        return;
-    } else {
-        $("#job_selection_box").css("border", "1px solid #e3e3e3");
-        $("#from_date").css("border", "1px solid #e3e3e3");
-        $("#to_date").css("border", "1px solid #e3e3e3");
-    }
+//     if (job_selected == "SJ" || from_date == "" || to_date == "") {
+//         $("#job_selection_box").css("border", "1px solid red");
+//         $("#from_date").css("border", "1px solid red");
+//         $("#to_date").css("border", "1px solid red");
+//         swal({
+//             title: "Error",
+//             text: "Check Mandatory field",
+//             icon: "warning",
+//         });
+//         return;
+//     } else {
+//         $("#job_selection_box").css("border", "1px solid #e3e3e3");
+//         $("#from_date").css("border", "1px solid #e3e3e3");
+//         $("#to_date").css("border", "1px solid #e3e3e3");
+//     }
 
-    $.ajaxSetup({
-        headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-    });
+//     $.ajaxSetup({
+//         headers: {
+//             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+//         },
+//     });
 
-    $.ajax({
-        method: "POST",
-        data: {
-            job_id: job_selected,
-            from_date: from_date,
-            to_date: to_date,
-        },
-        url: "/manager/generate_report",
-        success: function (data) {
-            let table_data = "";
-            let table_body = $("#report_table");
-            if (Object.keys(data.data).length == 0) {
-                swal({
-                    title: "Query result",
-                    text: "No queries found",
-                    icon: "success",
-                });
-            }
+//     $.ajax({
+//         method: "POST",
+//         data: {
+//             job_id: job_selected,
+//             from_date: from_date,
+//             to_date: to_date,
+//         },
+//         url: "/manager/generate_report",
+//         success: function (data) {
+//             let table_data = "";
+//             let table_body = $("#report_table");
+//             if (Object.keys(data.data).length == 0) {
+//                 swal({
+//                     title: "Query result",
+//                     text: "No queries found",
+//                     icon: "success",
+//                 });
+//             }
 
-            $.each(data.data, function (index, value) {
-                table_body.html("");
-                $("#total_output").text("");
-                table_data += `<tr role="row">
-              <td class="sorting_1" tabindex="0">${value.date_logged}</td>
-              <td>${value.job_name}</td>
-              <td>${value.company_name}</td>
-                <td>${value.job_cost}</td>
-            </tr>`;
-                table_body.append(table_data);
-            });
-            $("#total_output").text("Total amount (GHS): " + data.total);
-        },
-        error: function (error) {
-            console.log(error);
-        },
-    });
+//             $.each(data.data, function (index, value) {
+//                 table_body.html("");
+//                 $("#total_output").text("");
+            //     table_data += `<tr role="row">
+            //   <td class="sorting_1" tabindex="0">${value.date_logged}</td>
+            //   <td>${value.job_name}</td>
+            //   <td>${value.company_name}</td>
+            //     <td>${value.job_cost}</td>
+            // </tr>`;
+//                 table_body.append(table_data);
+//             });
+//             $("#total_output").text("Total amount (GHS): " + data.total);
+//         },
+//         error: function (error) {
+//             console.log(error);
+//         },
+//     });
 
-    //alert(job_selected + " " + from_date + " " + to_date);
-});
+//     //alert(job_selected + " " + from_date + " " + to_date);
+// });
 
 function populateDataTable(data) {
     console.log("populating data table...");

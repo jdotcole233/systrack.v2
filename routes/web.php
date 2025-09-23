@@ -37,7 +37,7 @@ Route::prefix('manager')->group(function () {
     Route::get('/my-jobs/{user?}', [ManagerController::class, 'managerMyJobs']);
     Route::get('/employees/{user?}', [ManagerController::class, 'managerEmployees']);
     Route::get('/report/{user?}', [ManagerController::class, 'index']);
-    Route::post('/generate_report', [ManagerController::class, 'getQueriedResults']);
+    Route::post('/generate_report/{user?}', [ManagerController::class, 'getQueriedResults'])->name('generate_report');
     Route::get('/clients/{user?}', [ManagerController::class, 'managerClients']);
 });
 

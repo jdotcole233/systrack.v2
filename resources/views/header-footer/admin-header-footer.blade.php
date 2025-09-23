@@ -244,7 +244,7 @@
                         </li> -->
 
                         <li>
-                            <a href="{{ url('/firmus-web-stats/admin') }}" class="waves-effect"><i
+                            <a href="{{ url('/admin/web-stats/admin') }}" class="waves-effect"><i
                                     class="fa fa-line-chart"></i><span> Activity Log </span></a>
                         </li>
 

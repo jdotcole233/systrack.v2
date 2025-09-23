@@ -111,7 +111,10 @@ class ManagerController extends Controller
 
     public function managerMyJobs($user)
     {
-        $my_jobs = Job_Assignment::where('emp_id', Auth::user()->emp_id)->where('delete_status', 'NOT DELETED')->get();
+        $my_jobs = Job_Assignment::where('emp_id', Auth::user()->emp_id)
+            ->where('delete_status', 'NOT DELETED')
+            ->orderBy('created_at', 'desc')
+            ->get();
         return view('employee.jobs', compact('my_jobs', 'user'));
     }
 
@@ -129,14 +132,19 @@ class ManagerController extends Controller
 
     function index($user)
     {
-        return view('manager.reports', compact('user'));
+        $report_data = [];
+        $total = 0;
+
+        return view('manager.reports', compact('user', 'report_data', 'total'));
     }
 
-    function getQueriedResults(Request $request)
+    function getQueriedResults(Request $request, $user)
     {
 
+        info("request " . json_encode($request->all()));
+
         if ($request->job_id == "allJobs") {
-            $test = job_request::join('clients', 'job__requests.client_id', 'clients.client_id')
+            $report_data = job_request::join('clients', 'job__requests.client_id', 'clients.client_id')
                 ->join('jobs', 'job__requests.job_id', 'jobs.job_id')
                 ->select("job__requests.created_at As date_logged", "job_name", "company_name", "job_cost", "job_request_id")
                 ->whereBetween('job__requests.created_at', [$request->from_date, $request->to_date])
@@ -148,7 +156,7 @@ class ManagerController extends Controller
                 ->where('job__requests.delete_status', 'NOT DELETED')
                 ->sum("job_cost");
         } else {
-            $test = job_request::where('job__requests.job_id', $request->job_id)
+            $report_data = job_request::where('job__requests.job_id', $request->job_id)
                 ->join('clients', 'job__requests.client_id', 'clients.client_id')
                 ->join('jobs', 'job__requests.job_id', 'jobs.job_id')
                 ->select("job__requests.created_at As date_logged", "job_name", "company_name", "job_cost", "job_request_id")
@@ -164,8 +172,11 @@ class ManagerController extends Controller
         }
 
 
+        info($report_data);
 
-        return response()->json(["data" => $test, "total" => $total]);
+        // return response()->json(["data" => $test, "total" => $total]);
+        return view('manager.reports', compact('user', 'report_data', 'total'));
+
     }
 
 }

@@ -239,9 +239,9 @@
                                 <a href="{{ url('/manager-reports/manager') }}" class="waves-effect"><i class="mdi mdi-calendar"></i><span> Reports </span></a>
                             </li> -->
 
-                            <li>
+                            <!-- <li>
                                 <a href="{{ url('/meeting-directory/manager') }}" class="waves-effect"><i class="fa fa-line-chart"></i><span> Meetings </span></a>
-                            </li>
+                            </li> -->
                             <li><a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();
                                               //  alert('Hello');

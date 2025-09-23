@@ -21,14 +21,14 @@
         <div class="row">
             <div class="col-xs-12">
                 <div class="page-title-box">
-                    <h4 class="page-title">Jobs</h4>
+                    <h4 class="page-title">Assigned Jobs</h4>
                     <ol class="breadcrumb p-0 m-0">
 
                         <li>
                             <a href="#">Firmus Advisory</a>
                         </li>
                         <li>
-                            <a href="#">Jobs</a>
+                            <a href="#">Assigned Jobs</a>
                         </li>
 
                     </ol>
@@ -67,12 +67,11 @@
 
 
 
-
                 <div class="row">
                     <div class="col-md-12">
                         <div class="col-sm-12">
                             <div class="card-box table-responsive">
-                                <h4 class="m-t-0 header-title"><b>My Jobs</b></h4>
+                                <h4 class="m-t-0 header-title"><b></b>Assigned Jobs</b></h4>
                                 <p class="text-muted font-13 m-b-30">
 
                                 </p>
