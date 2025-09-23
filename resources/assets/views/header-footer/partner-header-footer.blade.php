@@ -227,16 +227,16 @@
                                 <a href="{{ url('/manager/report/partner') }}" class="waves-effect"><i class="fa fa-line-chart"></i><span> Reports </span></a>
                             </li>
 
-                            <li>
+                            <!-- <li>
                                 <a href="{{ url('/meeting/directory/partner') }}" class="waves-effect"><i class="fa fa-line-chart"></i><span> Meetings </span></a>
-                            </li>
+                            </li> -->
                             <li>
                                 <a href="{{ url('/admin/home/partner-admin') }}" class="waves-effect"><i class="fa fa-home"></i><span> Switch to Admin </span></a>
                             </li>
 
-                            <li>
+                            <!-- <li>
                                 <a href="{{ url('/finance/home/partner-finance') }}" class="waves-effect"><i class="fa fa-home"></i><span> Switch to Finance </span></a>
-                            </li>
+                            </li> -->
 
                             <li><a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();

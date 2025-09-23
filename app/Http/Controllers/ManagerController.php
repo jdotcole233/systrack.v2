@@ -51,6 +51,7 @@ class ManagerController extends Controller
         $last_month = Carbon::now()->subDays(30);
         $new_client_information = Client::whereBetween('created_at', [$last_month->toDateTimeString(), $current_date->toDateTimeString()])
             ->where('delete_status', 'NOT DELETED')
+            ->latest('created_at')
             ->get();
 
         //    	$new_client_information = DB::table('clients')->select('*')->where('created_at','<',$date)->where('delete_status', 'NOT DELETED')->get();
@@ -68,13 +69,17 @@ class ManagerController extends Controller
 
     public function managerClients($user)
     {
-        $client_info = DB::table('clients')->select('*')->where('delete_status', 'NOT DELETED')->get();
+        $client_info = DB::table('clients')
+            ->select('*')
+            ->where('delete_status', 'NOT DELETED')
+            ->latest('created_at')
+            ->get();
         $current_date = Carbon::now();
         $last_month = Carbon::now()->subDays(30);
         $new_client_information = Client::whereBetween('created_at', [$last_month->toDateTimeString(), $current_date->toDateTimeString()])->where('delete_status', 'NOT DELETED')
-        ->orderBy('created_at', 'asc')
-        ->get();
-        Response::json($new_client_information);
+            ->orderBy('created_at', 'desc')
+            ->get();
+        // Response::json($new_client_information);
         return view('manager.clients', compact('client_info', 'new_client_information', 'user'));
     }
 

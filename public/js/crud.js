@@ -1036,21 +1036,21 @@ $(".progress_button").on("click", function () {
         if ($("#current_task_form").val().trim() == value.task_name.trim()) {
             $("#stages").append(
                 '<li class="task_info active" onmouseout="unshow()"  onmouseover="hover(this.id)" id=" ' +
-                    value.task_name +
+                    _.capitalize(value.task_name) +
                     ' "> </li>'
             );
             bool = true;
         } else if (!bool) {
             $("#stages").append(
                 '<li  class="task_info cc active" onmouseout="unshow()" onmouseover="hover(this.id)" id=" ' +
-                    value.task_name +
+                    _.capitalize(value.task_name) +
                     ' ">' +
                     "</li>"
             );
         } else if (bool) {
             $("#stages").append(
                 '<li  class="task_info" onmouseout="unshow()" onmouseover="hover(this.id)" id=" ' +
-                    value.task_name +
+                    _.capitalize(value.task_name) +
                     ' ">' +
                     "</li>"
             );
@@ -1121,7 +1121,7 @@ $("#sendTasksUpdate").click(function () {
 
     swal({
         title: "Task Update",
-        text: "Attempting updating status of this task",
+        text: `Attempting updating status of this task\nAn email notification will be sent ${client_email}`,
         icon: "warning",
         buttons: true,
         dangerMode: true,
@@ -1145,7 +1145,7 @@ $("#sendTasksUpdate").click(function () {
                     $("#loading_progress").modal("hide");
                     swal({
                         title: "Task Update",
-                        text: "Client Job updated successfully",
+                        text: "Client Job updated successfully\nEmail updated initiated...",
                         icon: "success",
                     });
                     $.ajaxSetup({
@@ -1184,6 +1184,7 @@ $("#sendTasksUpdate").click(function () {
                     });
                     $("#custom-width-modal2").modal("hide");
                     $("#job_task_completion_send").trigger("reset");
+                    window.location.reload();
                 },
                 error: function () {
                     $("#loading_progress").modal("hide");
@@ -1201,7 +1202,7 @@ $("#sendTasksUpdate").click(function () {
 });
 
 function unshow() {
-    $("#display_task").html($("#current_task_form").val());
+    $("#display_task").html(_.capitalize($("#current_task_form").val()));
 }
 
 function hover(id) {
@@ -1339,7 +1340,7 @@ $(".meeting_table").on("click", ".view_update_btn", function () {
     $.ajax({
         method: "GET",
         dataType: "json",
-        url: "/get_meeting_information/" + meeting_id,
+        url: "/meeting/get_information/" + meeting_id,
         success: function (data) {
             $("#meeting_back_id").val(data.m_b.meeting_id);
             $("#meeting_title_back").val(data.m_b.title);
@@ -1857,7 +1858,7 @@ $("#datatable-buttons").on("click", ".viewJob", function (e) {
     var job_id = $(this).val();
     console.log("job id ", job_id);
 
-    let job_details_url = "/manager-jobs/details/manager/" + job_id;
+    let job_details_url = "/manager-jobs/details/" + job_id;
 
     if (location.pathname.includes("/employee-jobs/employee")) {
         job_details_url = "/employee-jobs/details/" + job_id;
@@ -1885,7 +1886,7 @@ $("#datatable-buttons").on("click", ".viewJob", function (e) {
                 ) {
                     $("#stages").append(
                         '<li class="task_info active" onmouseout="unshow()"  onmouseover="hover(this.id)" id=" ' +
-                            value.task_name +
+                            _.capitalize(value.task_name) +
                             ' "> </li>'
                     );
                     bool = true;
@@ -1893,14 +1894,14 @@ $("#datatable-buttons").on("click", ".viewJob", function (e) {
                 if (!bool) {
                     $("#stages").append(
                         '<li  class="task_info cc active" onmouseout="unshow()" onmouseover="hover(this.id)" id=" ' +
-                            value.task_name +
+                            _.capitalize(value.task_name) +
                             ' ">' +
                             "</li>"
                     );
                 } else if (bool) {
                     $("#stages").append(
                         '<li  class="task_info" onmouseout="unshow()" onmouseover="hover(this.id)" id=" ' +
-                            value.task_name +
+                            _.capitalize(value.task_name) +
                             ' ">' +
                             "</li>"
                     );
@@ -1951,7 +1952,7 @@ $(".add_edit_btn").click(function () {
 $(".contactTable").on("click", ".view_contact", function (e) {
     $.ajax({
         method: "GET",
-        url: "/view_firmus_contact/" + $(this).val(),
+        url: "/address-book/view_firmus_contact/" + $(this).val(),
         success: function (data) {
             // console.log(data.website);
             $("#contact_name_det").val(data.contact_name);
@@ -1973,7 +1974,7 @@ $(".contactTable").on("click", ".view_contact", function (e) {
 $(".view_contact_current").click(function (e) {
     $.ajax({
         method: "GET",
-        url: "/view_firmus_contact/" + $(this).val(),
+        url: "/address-book/view_firmus_contact/" + $(this).val(),
         success: function (data) {
             // console.log(data.website);
             $("#contact_name_det").val(data.contact_name);
@@ -2005,7 +2006,7 @@ $(".contactTable").on("click", ".edit_cont_firm", function () {
 
     $.ajax({
         method: "GET",
-        url: "/view_firmus_contact/" + contact_id,
+        url: "/address-book/view_firmus_contact/" + contact_id,
         success: function (data) {
             $("#contact_name").val(data.contact_name);
             $("#organization").val(data.organization);
@@ -2317,7 +2318,7 @@ $(".save_changes").on("click", function () {
             $.ajax({
                 method: "post",
                 dataType: "json",
-                url: "/admin-employees-send-info",
+                url: "/admin/employees-send-info",
                 data: $("#employee_forms").serialize(),
                 success: function (data) {
                     $("#loading_progress").modal("hide");
@@ -2604,36 +2605,37 @@ $(".deleteNotification").on("click", function () {
 var timeoutCheck = null;
 var t_value;
 
-if (
-    window.location.pathname != "track" ||
-    window.location.pathname != "tracked-result"
-) {
-    t_value = setInterval(renewalNotification, 2000);
-}
+// if (
+//     window.location.pathname != "track" ||
+//     window.location.pathname != "tracked-result"
+// ) {
+//     t_value = setInterval(renewalNotification, 2000);
+// }
 
 if (timeoutCheck === "success") {
     clearInterval(t_value);
     console.log("Notification sent for renewal and ended");
 }
 
-// function renewalNotification(){
-//   $.ajax({
-//     method: "GET",
-//     dataType:"JSON",
-//     url: "/address-book/sendReminder",
-//     success: function (data){
-//       timeoutCheck = data.success;
-//       console.log("getting Reminder Notification");
-//     },
-//     error: function(e){
-//       console.log("Error in getting REMINDER Notification");
-//     }
-//   });
-// }
+function renewalNotification(){
+  $.ajax({
+    method: "GET",
+    dataType:"JSON",
+    url: "/address-book/sendReminder",
+    success: function (data){
+      timeoutCheck = data.success;
+      console.log("getting Reminder Notification");
+    },
+    error: function(e){
+      console.log("Error in getting REMINDER Notification");
+    }
+  });
+}
 
 let dt = $("#exampletable").DataTable();
 
 $("#generate_report").click(function () {
+    console.log("Reporting...")
     let job_selected = $("#job_selection_box").val();
     let job_name_selected = $("#job_selection_box").text();
     let from_date = $("#from_date").val();
@@ -2668,7 +2670,7 @@ $("#generate_report").click(function () {
             from_date: from_date,
             to_date: to_date,
         },
-        url: "/generate_report",
+        url: "/manager/generate_report",
         success: function (data) {
             let table_data = "";
             let table_body = $("#report_table");

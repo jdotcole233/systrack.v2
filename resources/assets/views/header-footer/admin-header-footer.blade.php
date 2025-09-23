@@ -218,9 +218,9 @@
                                 <a href="{{ url('/admin-reports/admin') }}" class="waves-effect"><i class="mdi mdi-calendar"></i><span> Reports </span></a>
                             </li>
  -->
-                            <li>
+                            <!-- <li>
                                 <a href="{{ url('/meeting-directory/admin') }}" class="waves-effect"><i class="fa fa-line-chart"></i><span> Meetings </span></a>
-                            </li>
+                            </li> -->
 
                             <li>
                                 <a href="{{ url('/firmus-web-stats/admin') }}" class="waves-effect"><i class="fa fa-line-chart"></i><span> Activity Log </span></a>

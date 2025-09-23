@@ -125,7 +125,7 @@
                 <table id="datatable-buttons" class="table table-striped table-bordered">
                     <thead>
                     <tr>
-                        <th>Job ID</th>
+                        <!-- <th>Job ID</th> -->
                         <th>Job Name</th>
                         <th>Required Details</th>
                         <th>Date Created</th>
@@ -140,7 +140,7 @@
 
                     @foreach($jobs as $job)
                     <tr id="Job{{$job->job_id}}"  data-toggle="modal" data-target="#custom-width-modal">
-                        <td>{{$job->job_id}}</td>
+                        <!-- <td>{{$job->job_id}}</td> -->
                         <td>{{$job->job_name}}</td>
                         <td>
                             @if($job->details != null)

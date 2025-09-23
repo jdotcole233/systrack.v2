@@ -34,25 +34,51 @@ class EmployeeController extends Controller
     public function save_job_task(Request $request)
     {
 
-        $start_date = DB::table('job__task__completions')->where('job_request_id', $request->input('job_request_id'))->where('delete_status', 'NOT DELETED')->where('status', 'completed')->orderBy('created_at', 'desc')->value('end_date');
+        $start_date = DB::table('job__task__completions')
+            ->where('job_request_id', $request->input('job_request_id'))
+            ->where('delete_status', 'NOT DELETED')
+            ->where('status', 'completed')
+            ->orderBy('created_at', 'desc')
+            ->value('end_date');
 
         $job_task = Job_Task_Completion::create($request->all());
 
-        Job_Task_Completion::where('job_task_completion_id', $job_task->id)->update(['start_date' => $start_date]);
+        Job_Task_Completion::where('job_task_completion_id', $job_task->id)
+            ->update(['start_date' => $start_date]);
+
         if ($request->input('status') == "completed") {
-            Job_Task_Completion::where('job_task_completion_id', $job_task->id)->update(['end_date' => $job_task->created_at]);
+            Job_Task_Completion::where('job_task_completion_id', $job_task->id)
+                ->update(['end_date' => $job_task->created_at]);
         }
 
-        $completed = DB::table('job__task__completions')->where('job_request_id', $request->input('job_request_id'))->where('delete_status', 'NOT DELETED')->where('status', 'completed')->orderBy('created_at', 'desc')->value('task_id');
+        $completed = DB::table('job__task__completions')
+            ->where('job_request_id', $request->input('job_request_id'))
+            ->where('delete_status', 'NOT DELETED')
+            ->where('status', 'completed')
+            ->orderBy('created_at', 'desc')
+            ->value('task_id');
 
-        $job_request = Job_Request::where('job_request_id', $request->input('job_request_id'))->first();
+        $job_request = Job_Request::where('job_request_id', $request->input('job_request_id'))
+            ->first();
 
-        $last = Task::where('task_id', $completed + 1)->where('job_id', $job_request->job_id)->first();
+        $last = Task::where('task_id', $completed + 1)
+            ->where(
+                'job_id',
+                $job_request->job_id
+            )->first();
         if ($last == null) {
-            $start_date = DB::table('job__task__completions')->where('job_request_id', $request->input('job_request_id'))->where('delete_status', 'NOT DELETED')->where('status', 'completed')->orderBy('created_at', 'asc')->value('end_date');
+            $start_date = DB::table('job__task__completions')
+
+                ->where('job_request_id', $request->input('job_request_id'))
+                ->where('delete_status', 'NOT DELETED')
+                ->where('status', 'completed')
+                ->orderBy('created_at', 'asc')
+                ->value('end_date');
             $job = Job_Completion::create($request->all());
-            Job_Completion::where('job_completion_id', $job->id)->update(['end_date' => $job->created_at, 'start_date' => $start_date]);
-            Job_Request::where('job_request_id', $request->input('job_request_id'))->update(['renewal_date' => $request->input('renewal_date')]);
+            Job_Completion::where('job_completion_id', $job->id)
+                ->update(['end_date' => $job->created_at, 'start_date' => $start_date]);
+            Job_Request::where('job_request_id', $request->input('job_request_id'))
+                ->update(['renewal_date' => $request->input('renewal_date')]);
         }
         return response()->json(['success' => $start_date]);
     }
@@ -80,11 +106,20 @@ class EmployeeController extends Controller
 
     public function employeeClients($user)
     {
-        $client_info = DB::table('clients')->select('*')->where('delete_status', 'NOT DELETED')->get();
+        $client_info = DB::table('clients')
+            ->where('delete_status', 'NOT DELETED')
+            ->latest('created_at')
+            ->get();
+
         $current_date = Carbon::now();
         $last_month = Carbon::now()->subDays(30);
-        $new_client_information = Client::whereBetween('created_at', [$last_month->toDateTimeString(), $current_date->toDateTimeString()])->where('delete_status', 'NOT DELETED')->get();
-        //   Response::json($new_client_information);
+
+        $new_client_information = Client::whereBetween('created_at', [$last_month->toDateTimeString(), $current_date->toDateTimeString()])
+            ->where('delete_status', 'NOT DELETED')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // Response::json($new_client_information);
         return view('employee.clients', compact('client_info', 'new_client_information', 'user'));
     }
 
@@ -224,7 +259,7 @@ class EmployeeController extends Controller
 
     public function viewJobDetails($id)
     {
-        info("Job details id ". json_encode($id));
+        info("Job details id " . json_encode($id));
         $job = Job_Request::where('job_request_id', $id)->first();
         $employees = Job_Assignment::where('job_request_id', $id)->get();
         return Response::json(View::make('employee.job_details', array('job' => $job, 'employees' => $employees))->render());

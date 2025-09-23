@@ -17,7 +17,12 @@ class ManagerAdminController extends Controller
 
     public function viewJobRequests($user)
     {
-        $job_requests = Job_Request::join('jobs', 'job__requests.job_id', 'jobs.job_id')->where('jobs.delete_status', 'NOT DELETED')->where('job__requests.delete_status', 'NOT DELETED')->select('job__requests.*')->get();
+        $job_requests = Job_Request::join('jobs', 'job__requests.job_id', 'jobs.job_id')
+        ->where('jobs.delete_status', 'NOT DELETED')
+        ->where('job__requests.delete_status', 'NOT DELETED')
+        ->select('job__requests.*')
+        ->latest('created_at')
+        ->get();
         // dd($job_requests);
         $clients = Client::all()->where('delete_status', 'NOT DELETED');
         $jobs = Job::all()->where('delete_status', 'NOT DELETED');

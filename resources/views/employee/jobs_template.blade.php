@@ -142,11 +142,7 @@
                                                 </div>
                                                 <div class="modal-body">
                                                     <div class="row">
-
                                                         <div class="col-md-12">
-
-
-
                                                         <div class="col-md-4">
                                                             <div class="form-group">
                                                                 <label for="field-1" class="control-label">Reference No</label>
@@ -328,21 +324,14 @@
                                     </div>
 
                                     <!-- End of Job Details -->
-
-
-
-
                         </div>
-
-
-
 
 
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="col-sm-12">
                                 <div class="card-box table-responsive">
-                                    <h4 class="m-t-0 header-title"><b>All Jobs</b></h4>
+                                    <h4 class="m-t-0 header-title"><b>All Job Requests</b></h4>
                                     <p class="text-muted font-13 m-b-30">
 
                                     </p>
@@ -371,11 +360,7 @@
                                         <tr id="Job{{$job_request->job_request_id}}">
                                             <td>{{$job_request->reference_number}}</td>
                                             <script type="text/javascript" > var data = {{ DB::table('jobs')->select('*')->where('job_id', $job_request->job_id)->where('delete_status', 'NOT DELETED')->get()}} </script>
-
                                             <td id="job_id_get">{{ DB::table('jobs')->select('job_name')->where('job_id', $job_request->job_id)->where('delete_status', 'NOT DELETED')->value('job_name')}}</td>
-
-
-
                                             <td>{{ DB::table('clients')->select('company_name')->where('client_id', $job_request->client_id)->where('delete_status', 'NOT DELETED')->value('company_name')}}</td>
                                             <td>{{DB::table('employees')->where('emp_id', $job_request->created_by)->value('first_name')}} {{DB::table('employees')->where('emp_id', $job_request->created_by)->value('last_name')}}</td>
                                             <td>
@@ -392,11 +377,7 @@
                                             @else
                                                 <td><button  class="btn btn-primary waves-effect waves-danger" disabled>Assign Job</button></td>
                                             @endif
-
-
                                             <td><button  type="button" id="deleteJobRequest" class="deleteJobRequest btn btn-danger waves-effect waves-danger " value="{{$job_request}}" >Delete</button></td>
-
-
                                         </tr>
                                         @endforeach
                                         </tbody>

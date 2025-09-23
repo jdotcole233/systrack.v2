@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Mail\Mailer;
-use App\Models\{Contact, Job_Request};
+use App\Models\{Contact, Job_Request, Task};
 use App\Mail\{FirmusMails, FirmusContactAddressEmail, ClientNotificationEmail, ClientReminder};
 use Illuminate\Support\Facades\{DB};
 
@@ -69,6 +69,29 @@ class AddressController extends Controller
 
         if ($request->input('choice') === "Email_Job") {
             // $name = DB::table('employees')->select('first_name','other_name','last_name','position')->where('emp_id', Auth::user()->emp_id)->where('delete_status','NOT DELETED')->first();
+
+            $job_request = Job_Request::where('reference_number', $request->input('reference_number'))
+                ->first();
+
+            info("Job request". json_encode($job_request));
+
+            $completed = DB::table('job__task__completions')
+                ->where('job_request_id', $job_request->job_request_id)
+                ->where('delete_status', 'NOT DELETED')
+                ->where('status', 'completed')
+                ->orderBy('created_at', 'desc')
+                ->value('task_id');
+            
+            info("completed tasks ". json_encode($completed));
+
+            $related_tasks = Task::where('job_id', $job_request->job_id)->get()->last();
+            info("Last task ". json_encode($related_tasks));
+
+            $review_company = false;
+            if ($related_tasks->task_id == $completed) {
+                $review_company = true;
+            }
+
             $emails = explode(',', $request->input('alt_email'));
             $size_of_email = count($emails);
             if ($size_of_email > 0) {
@@ -77,11 +100,11 @@ class AddressController extends Controller
                 $cc_size = count($cc_email);
                 if ($cc_size == 0) {
                     $mail->to($to_email)
-                        ->send(new firmusMails($request->input('client_message'), $request->input('subject'), $request->input('client_name'), $request->input('reference_number'), $request->input('job_title')));
+                        ->send(new firmusMails($request->input('client_message'), $request->input('subject'), $request->input('client_name'), $request->input('reference_number'), $request->input('job_title'), $review_company));
                 } else if ($cc_size > 0) {
                     $mail->to($to_email)
                         ->cc($cc_email)
-                        ->send(new firmusMails($request->input('client_message'), $request->input('subject'), $request->input('client_name'), $request->input('reference_number'), $request->input('job_title')));
+                        ->send(new firmusMails($request->input('client_message'), $request->input('subject'), $request->input('client_name'), $request->input('reference_number'), $request->input('job_title'), $review_company));
                 }
             }
 

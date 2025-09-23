@@ -191,7 +191,7 @@
     <div class="panel-group" id="accordion">
         <?php $count = 0; ?>
         @foreach($tasks as $task)
-        <?php $task_completion = App\Job_Task_Completion::where('task_id', $task->task_id)->where('job_request_id', $Job_Request->job_request_id)->orderBy('created_at', 'desc')->first();?>
+        <?php $task_completion = App\Models\Job_Task_Completion::where('task_id', $task->task_id)->where('job_request_id', $Job_Request->job_request_id)->orderBy('created_at', 'desc')->first();?>
         <div class="panel panel-default">
             <div class="panel-heading">
                 <h4 class="panel-title">

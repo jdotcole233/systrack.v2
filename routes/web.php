@@ -47,7 +47,7 @@ Route::prefix('manager-jobs')->group(function () {
     Route::post('/edit/{user?}', [ManagerAdminController::class, 'editJobRequest'])->name('editJobRequest');
     Route::post('/delete/{user?}', [ManagerAdminController::class, 'deleteJobRequest'])->name('deleteJobRequest');
     Route::post('/assign/{user?}', [ManagerAdminController::class, 'job_make_assignment']);
-    Route::get('/details/{user?}/{id?}', [ManagerAdminController::class, 'viewJobDetails']);
+    Route::get('/details/{id?}', [ManagerAdminController::class, 'viewJobDetails']);
     Route::get('/assign_retrieve_information/{id}', [ManagerAdminController::class, 'job_assign_retrieve']);
 });
 

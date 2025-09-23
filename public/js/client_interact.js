@@ -26,7 +26,7 @@ $(document).ready(function(){
         $.ajax({
           method: "POST",
           dataType: "JSON",
-          url: '/sendEmailRequest',
+          url: '/address-book/sendEmailRequest',
           data: {
               message: $('#message-text').val(),
               emails: tab,

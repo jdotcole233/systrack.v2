@@ -27,7 +27,10 @@ class EmployeeController extends Controller
 
     public function employeeJobs($user)
     {
-        $my_jobs = Job_Assignment::where('emp_id', Auth::user()->emp_id)->where('delete_status', 'NOT DELETED')->get();
+        $my_jobs = Job_Assignment::where('emp_id', Auth::user()->emp_id)
+        ->where('delete_status', 'NOT DELETED')
+        ->orderBy('created_at', 'desc')
+        ->get();
         return view('employee.jobs', compact('my_jobs', 'user'));
     }
 

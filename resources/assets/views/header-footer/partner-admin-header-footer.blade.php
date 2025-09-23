@@ -206,9 +206,9 @@
                             </li> -->
                             
 
-                            <li>
+                            <!-- <li>
                                 <a href="{{ url('/meeting/directory/partner-admin') }}" class="waves-effect"><i class="fa fa-line-chart"></i><span> Meetings </span></a>
-                            </li>
+                            </li> -->
 
                             <li>
                                 <a href="{{ url('/firmus-web-stats/partner-admin') }}" class="waves-effect"><i class="fa fa-line-chart"></i><span> Activity Logs </span></a>
@@ -223,9 +223,9 @@
                                 <a href="{{ url('/manager/home/partner') }}" class="waves-effect"><i class="fa fa-home"></i><span> Switch to Manager </span></a>
                             </li>
 
-                            <li>
+                            <!-- <li>
                                 <a href="{{ url('/finance/home/partner-finance') }}" class="waves-effect"><i class="fa fa-home"></i><span> Switch to Finance </span></a>
-                            </li>
+                            </li> -->
 
                             <li><a href="{{ route('logout') }}"
                                             onclick="event.preventDefault();

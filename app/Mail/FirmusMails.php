@@ -16,19 +16,21 @@ class FirmusMails extends Mailable
     public $job_reference_number;
     public $message_subject;
     public $job_title;
+    public $review_company;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($client_message,$message_subject = "(no subject)", $client_name, $reference_number, $job_title)
+    public function __construct($client_message,$message_subject = "(no subject)", $client_name, $reference_number, $job_title, $review_company)
     {
          $this->client_message = $client_message;
          $this->message_subject = $message_subject;
          $this->client_name = $client_name;
          $this->job_reference_number = $reference_number;
          $this->job_title = $job_title;
+         $this->review_company = $review_company;
     }
 
     /**
