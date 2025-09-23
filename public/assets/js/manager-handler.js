@@ -82,6 +82,13 @@ $("#add_client").on("click", function (e) {
 });
 
 $("#add_client_employee").on("click", function (e) {
+
+    let client_url = "/send_client_information/employee";
+
+    if (location.pathname.includes("/employee/clients/employee")) {
+        client_url = "/employee/send_client_information/employee"
+    }
+
     swal({
         title: "Add Client",
         text: "Adding new client to Firmus-SysTrack",
@@ -104,7 +111,7 @@ $("#add_client_employee").on("click", function (e) {
             $.ajax({
                 method: "POST",
                 dataType: "json",
-                url: "/send_client_information/employee",
+                url: client_url,
                 data: $("#client-addition-forms").serialize(),
                 success: function (data) {
                     $("#loading_progress").modal("hide");
@@ -166,6 +173,10 @@ $("#datatable-buttons").on("click", ".client_edit_info", function (e) {
 
     var url = "/client_edit_get_information/" + client_id;
 
+    if (location.pathname.includes("/employee/clients/employee")) {
+        url = "/employee/client_edit_get_information/" + client_id;
+    }
+
     $.ajax({
         type: "GET",
         dataType: "json",
@@ -190,6 +201,10 @@ $("#datatable-buttons").on("click", ".client_edit_info", function (e) {
 
 $(".update_client").on("click", function (e) {
     var url = "/client_edit_information/" + client_id;
+
+    if (location.pathname.includes("/employee/clients/employee")) {
+        url = "/employee/client_edit_information/" + client_id;
+    }
 
     swal({
         title: "Are you sure?",
@@ -250,7 +265,7 @@ $(".update_client").on("click", function (e) {
                     );
 
                     $("#con-close-modal").modal("hide");
-					window.location.reload();
+                    window.location.reload();
                 },
                 error: function () {
                     swal("Check to see essential fields are not blank");
@@ -271,6 +286,10 @@ $("#table_body").on("click", ".client_delete_info", function (e) {
     var client_del_id = $(this).attr("value");
 
     var url_delete = "/client_delete_information/" + client_del_id;
+
+        if (location.pathname.includes("/employee/clients/employee")) {
+        url_delete = "/employee/client_delete_information/" + client_id;
+    }
 
     swal({
         title: "Are you sure?",

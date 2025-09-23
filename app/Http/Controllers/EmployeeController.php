@@ -94,7 +94,11 @@ class EmployeeController extends Controller
 
     public function employeeClients($user)
     {
-        $client_info = DB::table('clients')->select('*')->where('delete_status', 'NOT DELETED')->get();
+        $client_info = DB::table('clients')
+        ->select('*')
+        ->where('delete_status', 'NOT DELETED')
+        ->orderBy('created_at', 'desc')
+        ->get();
         $current_date = Carbon::now();
         $last_month = Carbon::now()->subDays(30);
         $new_client_information = Client::whereBetween('created_at', [$last_month->toDateTimeString(), $current_date->toDateTimeString()])->where('delete_status', 'NOT DELETED')->get();

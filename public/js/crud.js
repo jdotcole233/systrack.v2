@@ -245,7 +245,7 @@ $("#save").on("click", function (e) {
             $.ajax({
                 method: "post",
                 data: $("#job").serialize(),
-                url: "/admin-edit_jobs",
+                url: "/admin/edit_jobs",
                 success: function (data) {
                     $("#loading_progress").modal("hide");
                     if (data.message === "success") {
@@ -260,7 +260,7 @@ $("#save").on("click", function (e) {
                         $.ajax({
                             method: "POST",
                             dataType: "json",
-                            url: "/sendNotification",
+                            url: "/notification/send",
                             data: {
                                 message:
                                     "Job" +
@@ -281,7 +281,7 @@ $("#save").on("click", function (e) {
                         $.ajax({
                             method: "post",
                             data: $("#task-form").serialize(),
-                            url: "/admin-add_tasks",
+                            url: "/admin/add_tasks",
                             success: function (data) {
                                 swal({
                                     title: "success",
@@ -364,7 +364,7 @@ $("#addJob").on("click", function (e) {
                         $.ajax({
                             method: "POST",
                             dataType: "json",
-                            url: "/sendNotification",
+                            url: "/notification/send",
                             data: {
                                 message:
                                     "Job" +
@@ -464,7 +464,7 @@ $(".deleteJob").on("click", function (e) {
                     $.ajax({
                         method: "POST",
                         dataType: "json",
-                        url: "/sendNotification",
+                        url: "/notification/send",
                         data: {
                             message:
                                 "Job" + data.data.job_name + "has been deleted",
@@ -580,7 +580,7 @@ $("#submit_job_request").on("click", function (e) {
                     $.ajax({
                         method: "POST",
                         dataType: "json",
-                        url: "/sendNotification",
+                        url: "/notification/send",
                         data: {
                             message:
                                 "Job Request" +
@@ -675,7 +675,7 @@ $("#edit_job_request").on("click", function (e) {
                     $.ajax({
                         method: "POST",
                         dataType: "json",
-                        url: "/sendNotification",
+                        url: "/notification/send",
                         data: {
                             message:
                                 "Job Request" +
@@ -761,7 +761,7 @@ $("#datatable-buttons").on("click", ".deleteJobRequest", function (e) {
                     $.ajax({
                         method: "POST",
                         dataType: "json",
-                        url: "/sendNotification",
+                        url: "/notification/send",
                         data: {
                             message:
                                 "Job Request" +
@@ -1269,7 +1269,7 @@ $("#enter_meeting").on("click", function (e) {
                         $.ajax({
                             method: "POST",
                             dataType: "json",
-                            url: "/sendNotification",
+                            url: "/notification/send",
                             data: {
                                 message:
                                     "Meeting about" +
@@ -1480,7 +1480,7 @@ $("#update_btn_minutes").click(function () {
                             $.ajax({
                                 method: "POST",
                                 dataType: "json",
-                                url: "/sendNotification",
+                                url: "/notification/send",
                                 data: {
                                     message:
                                         "Meeting about" +
@@ -1515,7 +1515,7 @@ $("#update_btn_minutes").click(function () {
                             $.ajax({
                                 method: "POST",
                                 dataType: "json",
-                                url: "/sendNotification",
+                                url: "/notification/send",
                                 data: {
                                     message:
                                         "Meeting about" +
@@ -1552,7 +1552,7 @@ $("#update_btn_minutes").click(function () {
                                 $.ajax({
                                     method: "POST",
                                     dataType: "json",
-                                    url: "/sendNotification",
+                                    url: "/notification/send",
                                     data: {
                                         message:
                                             "You have been removed from the meeting about" +
@@ -1682,7 +1682,7 @@ $(".cancel_meeting").click(function (e) {
                         $.ajax({
                             method: "POST",
                             dataType: "json",
-                            url: "/sendNotification",
+                            url: "/notification/send",
                             data: {
                                 message:
                                     "Meeting about" +
@@ -2058,7 +2058,7 @@ $(".update_con").click(function () {
                 method: "POST",
                 dataType: "json",
                 data: $("#cont_forms").serialize(),
-                url: "/update_firmus_contact_info/" + contact_id,
+                url: "/address-book/update_firmus_contact_info/" + contact_id,
                 success: function (data) {
                     $("#loading_progress").modal("hide");
                     $("#cont_forms").trigger("reset");
@@ -2072,7 +2072,7 @@ $(".update_con").click(function () {
                     $.ajax({
                         method: "POST",
                         dataType: "json",
-                        url: "/sendNotification",
+                        url: "/notification/send",
                         data: {
                             message:
                                 "Contact " +
@@ -2135,7 +2135,7 @@ $(".contactTable").on("click", ".del_cont_firm", function () {
                     $.ajax({
                         method: "POST",
                         dataType: "json",
-                        url: "/sendNotification",
+                        url: "/notification/send",
                         data: {
                             message:
                                 "Contact " +
@@ -2248,14 +2248,14 @@ $("#save_con").on("click", function () {
             $.ajax({
                 method: "post",
                 dataType: "json",
-                url: "/send_contact",
+                url: "/address-book/send_contact",
                 data: $("#cont_forms").serialize(),
                 success: function (data) {
                     $("#loading_progress").modal("hide");
                     $.ajax({
                         method: "POST",
                         dataType: "json",
-                        url: "/sendNotification",
+                        url: "/notification/send",
                         data: {
                             message: "Contact has been added",
                             subject: "Contact Added",

@@ -37,7 +37,7 @@ class ClientNotificationEmail extends Mailable
      */
     public function build()
     {
-        return $this->from('contact.systrack@firmusadvisory.com')->subject("CLIENT REQUEST ON ". $this->reference_number)
+        return $this->from('noreply@firmusadvisoryapp.com')->subject("CLIENT REQUEST ON ". $this->reference_number)
         ->view('emails.clientEmergencyEmail');
     }
 }

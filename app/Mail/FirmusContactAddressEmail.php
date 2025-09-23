@@ -34,6 +34,6 @@ class FirmusContactAddressEmail extends Mailable
      */
     public function build()
     {
-        return $this->from('contact.systrack@firmusadvisory.com')->subject($this->message_subject)->view('emails.firmusContactEmail');
+        return $this->from('noreply@firmusadvisoryapp.com')->subject($this->message_subject)->view('emails.firmusContactEmail');
     }
 }

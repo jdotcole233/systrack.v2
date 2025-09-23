@@ -31,6 +31,6 @@ class ErrorMail extends Mailable
      */
     public function build()
     {
-        return $this->from('contact.systrack@firmusadvisory.com')->subject("Current Error Message")->view('emails.errorEmails');
+        return $this->from('noreply@firmusadvisoryapp.com')->subject("Current Error Message")->view('emails.errorEmails');
     }
 }

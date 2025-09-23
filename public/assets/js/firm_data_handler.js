@@ -45,8 +45,6 @@ $('table').on("click",".edit_btn",function(){
 
  	$('.update_changes').on('click',function(e){
 
-
-
 	  swal({
               title: "Update Employee",
               text: "Update employee details",
@@ -68,7 +66,7 @@ $('table').on("click",".edit_btn",function(){
 
  					$.ajax({
 			 			method:'POST',
-			 			url:'/employee_in_update_record_user/' + individual_id,
+			 			url:'/admin/employee_in_update_record_user/' + individual_id,
 			 			data: $("#employee_forms").serialize(),
 			 			success: function(data){
              				 $('#loading_progress').modal('hide');

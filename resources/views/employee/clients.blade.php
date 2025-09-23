@@ -93,7 +93,7 @@
 
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="field-3" class="control-label">Country</label>
                                                 <select name="nationality" id="country_check" class="form-control" required>

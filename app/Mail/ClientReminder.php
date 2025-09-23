@@ -43,7 +43,7 @@ class ClientReminder extends Mailable
     public function build()
     {
         $subject_tobe_sent = "FRIENDLY REMINDER FOR  ". $this->reference_number;
-        return $this->from('contact.systrack@firmusadvisory.com')->subject($subject_tobe_sent)
+        return $this->from('noreply@firmusadvisoryapp.com')->subject($subject_tobe_sent)
         ->view('emails.reminderClientEmail');
     }
 }
