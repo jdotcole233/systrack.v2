@@ -145,7 +145,7 @@ class ManagerController extends Controller
 
         if ($request->job_id == "allJobs") {
             $report_data = job_request::join('clients', 'job__requests.client_id', 'clients.client_id')
-                ->join('jobs', 'job__requests.job_id', 'jobs.job_id')
+                ->join('firmus_jobs', 'job__requests.job_id', 'firmus_jobs.job_id')
                 ->select("job__requests.created_at As date_logged", "job_name", "company_name", "job_cost", "job_request_id")
                 ->whereBetween('job__requests.created_at', [$request->from_date, $request->to_date])
                 ->latest('job__requests.created_at')
@@ -158,7 +158,7 @@ class ManagerController extends Controller
         } else {
             $report_data = job_request::where('job__requests.job_id', $request->job_id)
                 ->join('clients', 'job__requests.client_id', 'clients.client_id')
-                ->join('jobs', 'job__requests.job_id', 'jobs.job_id')
+                ->join('firmus_jobs', 'job__requests.job_id', 'firmus_jobs.job_id')
                 ->select("job__requests.created_at As date_logged", "job_name", "company_name", "job_cost", "job_request_id")
                 ->whereBetween('job__requests.created_at', [$request->from_date, $request->to_date])
                 ->latest('job__requests.created_at')

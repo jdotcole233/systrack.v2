@@ -1,5 +1,5 @@
 <?php
- $job_id = DB::table('jobs')->join('job__requests','jobs.job_id','=','job__requests.job_id')->where('job_request_id',$job->job_request_id)->where('jobs.delete_status', 'NOT DELETED')->value('jobs.job_id');
+ $job_id = DB::table('firmus_jobs')->join('job__requests','firmus_jobs.job_id','=','job__requests.job_id')->where('job_request_id',$job->job_request_id)->where('firmus_jobs.delete_status', 'NOT DELETED')->value('firmus_jobs.job_id');
 $s = DB::table('job__task__completions')->where('job_request_id',$job->job_request_id)->where('delete_status', 'NOT DELETED')->orderBy('created_at','desc')->first();
 //dd($s);
     if($s != null) {

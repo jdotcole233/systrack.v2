@@ -17,7 +17,7 @@
                   <select class="form-control" name="job_id" id="job_selection_box" required>
                     <option value=""> SELECT JOB </option>
                     <option value="allJobs"> ALL JOBS </option>
-                    @foreach(DB::table('jobs')->get() as $job)
+                    @foreach(DB::table('firmus_jobs')->get() as $job)
                       <option value="{{$job->job_id}}">{{$job->job_name}}</option>
                     @endforeach
                   </select>

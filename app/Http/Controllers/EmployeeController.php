@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\FirmusJobAssignedMail;
 use App\Models\{
     Job_Assignment,
     Job_Task_Completion,
@@ -15,7 +16,7 @@ use App\Models\{
     Employee,
 };
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\{Auth, DB, Response, View};
+use Illuminate\Support\Facades\{Auth, DB, Mail, Response, View};
 use Carbon\Carbon;
 
 class EmployeeController extends Controller
@@ -28,9 +29,9 @@ class EmployeeController extends Controller
     public function employeeJobs($user)
     {
         $my_jobs = Job_Assignment::where('emp_id', Auth::user()->emp_id)
-        ->where('delete_status', 'NOT DELETED')
-        ->orderBy('created_at', 'desc')
-        ->get();
+            ->where('delete_status', 'NOT DELETED')
+            ->orderBy('created_at', 'desc')
+            ->get();
         return view('employee.jobs', compact('my_jobs', 'user'));
     }
 
@@ -89,16 +90,15 @@ class EmployeeController extends Controller
             'contacts' => $contacts,
             'activities' => $activities
         ]);
-
     }
 
     public function employeeClients($user)
     {
         $client_info = DB::table('clients')
-        ->select('*')
-        ->where('delete_status', 'NOT DELETED')
-        ->orderBy('created_at', 'desc')
-        ->get();
+            ->select('*')
+            ->where('delete_status', 'NOT DELETED')
+            ->orderBy('created_at', 'desc')
+            ->get();
         $current_date = Carbon::now();
         $last_month = Carbon::now()->subDays(30);
         $new_client_information = Client::whereBetween('created_at', [$last_month->toDateTimeString(), $current_date->toDateTimeString()])->where('delete_status', 'NOT DELETED')->get();
@@ -135,14 +135,13 @@ class EmployeeController extends Controller
 
 
         return response()->json($delete_detail);
-
     }
 
 
     public function viewJobRequests($user)
     {
-        $job_requests = Job_Request::join('jobs', 'job__requests.job_id', 'jobs.job_id')
-            ->where('jobs.delete_status', 'NOT DELETED')
+        $job_requests = Job_Request::join('firmus_jobs', 'job__requests.job_id', 'firmus_jobs.job_id')
+            ->where('firmus_jobs.delete_status', 'NOT DELETED')
             ->where('job__requests.delete_status', 'NOT DELETED')
             ->select('job__requests.*')
             ->orderBy('job__requests.created_at', 'DESC')
@@ -155,14 +154,14 @@ class EmployeeController extends Controller
     }
 
     //    public function viewJobAssignments () {
-//        $jobs = Job_Assignment::all();
-//        return view('manager.jobs', 'jobs');
-//    }
+    //        $jobs = Job_Assignment::all();
+    //        return view('manager.jobs', 'jobs');
+    //    }
 
     public function addJobRequest(Request $request)
     {
         $new_job_added = Job_Request::create($request->all());
-        $job_name = DB::table('jobs')->select('job_name')->where('job_id', $new_job_added->job_id)->where('delete_status', 'NOT DELETED')->first()->job_name;
+        $job_name = DB::table('firmus_jobs')->select('job_name')->where('job_id', $new_job_added->job_id)->where('delete_status', 'NOT DELETED')->first()->job_name;
         Job_Request::where('job_request_id', $new_job_added->id)->update(['created_by' => Auth::user()->emp_id, 'renewal_status' => 'NOT RENEWED']);
         $client_name = DB::table('clients')->select('company_name')->where('client_id', $new_job_added->client_id)->where('delete_status', 'NOT DELETED')->first()->company_name;
         return response()->json(['message' => 'success', 'Data_back' => $new_job_added, 'client_info' => $client_name]);
@@ -187,7 +186,7 @@ class EmployeeController extends Controller
         // dd($id);
         $job_assignment = Job_Request::where('job_request_id', $id)->where('delete_status', 'NOT DELETED')->first();
 
-        $job_name = DB::table('jobs')->select('job_name')->where('job_id', $job_assignment->job_id)->where('delete_status', 'NOT DELETED')->value('job_name');
+        $job_name = DB::table('firmus_jobs')->select('job_name')->where('job_id', $job_assignment->job_id)->where('delete_status', 'NOT DELETED')->value('job_name');
 
         $client_name = DB::table('clients')->select('company_name')->where('client_id', $job_assignment->client_id)->where('delete_status', 'NOT DELETED')->value('company_name');
 
@@ -208,21 +207,45 @@ class EmployeeController extends Controller
     {
         $emps = json_decode($request->input('jsonData'));
         $removed_employees = json_decode($request->input('removed_employees'));
-        $data = Job_Request::where('job_request_id', $request->input('job_req_id'))->first();
+        $data = Job_Request::with(['job'])->where('job_request_id', $request->input('job_req_id'))->first();
 
         if ($request->input('jsonData') != "}" || $request->input('removed_employees') != "}") {
 
-            if ($request->input('removed_employees') != "}")
+            if ($request->input('removed_employees') != "}") {
                 foreach ($removed_employees as $removed_employee) {
+                    info(json_encode($removed_employee));
                     Job_Assignment::where('job_assignment_id', $removed_employee)->update(['delete_status' => 'DELETED']);
+                    // $employee = Employee::where('emp_id', $emp_id)->first();
+                    // $assigned_to = $employee->first_name . ' ' . $employee->last_name;
+                    // FirmusJobAssignedMail::dispatch(
+                    //     $assigned_to,
+                    //     true,
+                    //     $data->job->job_name,
+                    //     $data->reference_number,
+                    //     $data->created_at,
+                    //     Auth::user()->employee->first_name . ' ' . Auth::user()->employee->last_name
+                    // );
                 }
+            }
 
             $emp_assignment_id = 0;
-            if ($request->input('jsonData') != "}")
+            if ($request->input('jsonData') != "}") {
                 foreach ($emps as $emp_id) {
                     $emp_assignment_id = Job_Assignment::create(['emp_id' => $emp_id, 'job_request_id' => $request->input('job_req_id')])->id;
                     Job_Assignment::where('job_assignment_id', $emp_assignment_id)->update(['assigned_by' => Auth::user()->emp_id]);
+                    $employee = Employee::where('emp_id', $emp_id)->first();
+                    $assigned_to = $employee->first_name . ' ' . $employee->last_name;
+                    
+                    Mail::to($employee->company_email)->queue(new FirmusJobAssignedMail(
+                        $assigned_to,
+                        true,
+                        $data->job->job_name,
+                        $data->reference_number,
+                        $data->created_at,
+                        Auth::user()->employee->first_name . ' ' . Auth::user()->employee->last_name
+                    ));
                 }
+            }
 
 
             $job_id = DB::table('job__requests')->where('job_request_id', $request->input('job_req_id'))->where('delete_status', 'NOT DELETED')->value('job_id');
@@ -233,9 +256,7 @@ class EmployeeController extends Controller
             $task_completion_count = Job_Task_Completion::where('job_request_id', $request->input('job_req_id'))->where('task_id', $task_id)->count();
 
             if ($request->input('jsonData') != "}" && $task_completion_count == 0)
-
                 Job_Task_Completion::create(['job_request_id' => $request->input('job_req_id'), 'task_id' => $task_id, 'job_assignment_id' => $emp_assignment_id, 'status' => $status, 'comments' => $comments, 'start_date' => Carbon::now(), 'end_date' => Carbon::now()]);
-
         } else
             return response()->json(['message' => 'error']);
 
@@ -250,5 +271,4 @@ class EmployeeController extends Controller
         $employees = Job_Assignment::where('job_request_id', $id)->get();
         return Response::json(View::make('employee.job_details', array('job' => $job, 'employees' => $employees))->render());
     }
-
 }

@@ -17,8 +17,8 @@ class ManagerAdminController extends Controller
 
     public function viewJobRequests($user)
     {
-        $job_requests = Job_Request::join('jobs', 'job__requests.job_id', 'jobs.job_id')
-        ->where('jobs.delete_status', 'NOT DELETED')
+        $job_requests = Job_Request::join('firmus_jobs', 'job__requests.job_id', 'firmus_jobs.job_id')
+        ->where('firmus_jobs.delete_status', 'NOT DELETED')
         ->where('job__requests.delete_status', 'NOT DELETED')
         ->select('job__requests.*')
         ->latest('created_at')
@@ -38,7 +38,7 @@ class ManagerAdminController extends Controller
     public function addJobRequest(Request $request)
     {
         $new_job_added = Job_Request::create($request->all());
-        $job_name = DB::table('jobs')->select('job_name')
+        $job_name = DB::table('firmus_jobs')->select('job_name')
             ->where('job_id', $new_job_added->job_id)
             ->where('delete_status', 'NOT DELETED')
             ->first()
@@ -79,7 +79,7 @@ class ManagerAdminController extends Controller
         // dd($id);
         $job_assignment = Job_Request::where('job_request_id', $id)->where('delete_status', 'NOT DELETED')->first();
 
-        $job_name = DB::table('jobs')->select('job_name')->where('job_id', $job_assignment->job_id)->where('delete_status', 'NOT DELETED')->value('job_name');
+        $job_name = DB::table('firmus_jobs')->select('job_name')->where('job_id', $job_assignment->job_id)->where('delete_status', 'NOT DELETED')->value('job_name');
 
         $client_name = DB::table('clients')->select('company_name')->where('client_id', $job_assignment->client_id)->where('delete_status', 'NOT DELETED')->value('company_name');
 
