@@ -513,7 +513,6 @@ $("#submit_job_request").on("click", function (e) {
     parses("details");
     var info = JSON.parse($("#jobsMenu").val());
 
-
     // document.getElementById('jobsMenu').options[document.getElementById('jobsMenu').selectedIndex].value = info.job_id;
 
     $.ajaxSetup({
@@ -630,8 +629,8 @@ $("#edit_job_request").on("click", function (e) {
     // let job_request_edit_url = "/manager-jobs_edit"; old
     let job_request_edit_url = "/manager-jobs/edit";
 
-    if (location.pathname.includes('employee-jobs/employee')) {
-        job_request_edit_url = '/employee-jobs/edit'
+    if (location.pathname.includes("employee-jobs/employee")) {
+        job_request_edit_url = "/employee-jobs/edit";
     }
 
     swal({
@@ -791,14 +790,15 @@ $("#datatable-buttons").on("click", ".deleteJobRequest", function (e) {
 });
 
 $("#datatable-buttons").on("click", ".assignJobRequest", function (event) {
-
     var job_assign_id = $(this).val();
-    
-    // var job_assign_url = "/job_assign_retrieve_information/" + job_assign_id;
-    var job_assign_url = "/manager-jobs/assign_retrieve_information/" + job_assign_id;
 
-    if (location.pathname.includes('employee-jobs/employee'))
-        job_assign_url  = "/employee-jobs/assign_retrieve_information/" + job_assign_id;
+    // var job_assign_url = "/job_assign_retrieve_information/" + job_assign_id;
+    var job_assign_url =
+        "/manager-jobs/assign_retrieve_information/" + job_assign_id;
+
+    if (location.pathname.includes("employee-jobs/employee"))
+        job_assign_url =
+            "/employee-jobs/assign_retrieve_information/" + job_assign_id;
 
     $.ajaxSetup({
         headers: {
@@ -837,7 +837,7 @@ $("#datatable-buttons").on("click", ".assignJobRequest", function (event) {
             $("#employeeList").html(tr_info);
         },
         error: function (e) {
-            console.log(e)
+            console.log(e);
         },
     });
 
@@ -902,10 +902,9 @@ $("#assignJobRequestSend").on("click", function (e) {
     // let assign_job_url = "/jobs_assign";
     let assign_job_url = "/manager-jobs/assign";
 
-    if (location.pathname.includes('/employee-jobs/employee')) {
+    if (location.pathname.includes("/employee-jobs/employee")) {
         assign_job_url = "/employee-jobs/assign";
     }
-
 
     $.ajax({
         type: "post",
@@ -1097,10 +1096,19 @@ $(".close_clear").click(function () {
     clearInterval(intervalMessage);
 });
 
+$('#send_email_notification').click(function () {
+    if ($(this).is(':checked')) {
+        $('#email_section').show();
+    } else {
+        $('#email_section').hide();
+    }
+});
+
 $("#sendTasksUpdate").click(function () {
     // $('#client_remark').val($('#current_task_form').val());
     $("#renewal_date_o").val($("#renewal_date_proxy").val());
     // $('#client_remark').val($('#current_task_form').val());
+    let send_email_option = $('#send_email_notification').is(':checked');
 
     if ($("#field-5").val() == " ") {
         $("#field-5").css("border", "1px solid red");
@@ -1148,40 +1156,44 @@ $("#sendTasksUpdate").click(function () {
                         text: "Client Job updated successfully\nEmail updated initiated...",
                         icon: "success",
                     });
-                    $.ajaxSetup({
-                        headers: {
-                            "X-CSRF-TOKEN": $('meta[name="csrf_token"]').attr(
-                                "content"
-                            ),
-                        },
-                    });
 
-                    $.ajax({
-                        type: "post",
-                        dataType: "json",
-                        data: {
-                            client_message: $("#client_remarks").val(),
-                            alt_email: client_email,
-                            reference_number: $("#field-1").val(),
-                            client_name: $("#field-3").val(),
-                            job_title: $("#field-2").val(),
-                            subject: "FIRMUS JOB PROGRESS UPDATE",
-                            choice: "Email_Job",
-                        },
-                        url: "/meeting/send_email_firmus",
-                        success: function (data) {
-                            swal({
-                                title: "Nofitication",
-                                text: "Automatic update sent to clients successfully",
-                                icon: "success",
-                            });
-                            $("#custom-width-modal2").modal("hide");
-                        },
-                        error: function (e) {
-                            console.log("Error sending message to client");
-                            $("#custom-width-modal2").modal("hide");
-                        },
-                    });
+                    if (send_email_option) {
+                        $.ajaxSetup({
+                            headers: {
+                                "X-CSRF-TOKEN": $(
+                                    'meta[name="csrf_token"]'
+                                ).attr("content"),
+                            },
+                        });
+
+                        $.ajax({
+                            type: "post",
+                            dataType: "json",
+                            data: {
+                                client_message: $("#client_remarks").val(),
+                                alt_email: client_email,
+                                reference_number: $("#field-1").val(),
+                                client_name: $("#field-3").val(),
+                                job_title: $("#field-2").val(),
+                                subject: "FIRMUS JOB PROGRESS UPDATE",
+                                choice: "Email_Job",
+                            },
+                            url: "/meeting/send_email_firmus",
+                            success: function (data) {
+                                swal({
+                                    title: "Nofitication",
+                                    text: "Automatic update sent to clients successfully",
+                                    icon: "success",
+                                });
+                                $("#custom-width-modal2").modal("hide");
+                            },
+                            error: function (e) {
+                                console.log("Error sending message to client");
+                                $("#custom-width-modal2").modal("hide");
+                            },
+                        });
+                    }
+
                     $("#custom-width-modal2").modal("hide");
                     $("#job_task_completion_send").trigger("reset");
                     window.location.reload();
@@ -1864,7 +1876,7 @@ $("#datatable-buttons").on("click", ".viewJob", function (e) {
         job_details_url = "/employee-jobs/details/" + job_id;
     }
 
-    console.log(job_details_url)
+    console.log(job_details_url);
 
     // "/viewJobDetails/" + job_id
 
@@ -2617,19 +2629,19 @@ if (timeoutCheck === "success") {
     console.log("Notification sent for renewal and ended");
 }
 
-function renewalNotification(){
-  $.ajax({
-    method: "GET",
-    dataType:"JSON",
-    url: "/address-book/sendReminder",
-    success: function (data){
-      timeoutCheck = data.success;
-      console.log("getting Reminder Notification");
-    },
-    error: function(e){
-      console.log("Error in getting REMINDER Notification");
-    }
-  });
+function renewalNotification() {
+    $.ajax({
+        method: "GET",
+        dataType: "JSON",
+        url: "/address-book/sendReminder",
+        success: function (data) {
+            timeoutCheck = data.success;
+            console.log("getting Reminder Notification");
+        },
+        error: function (e) {
+            console.log("Error in getting REMINDER Notification");
+        },
+    });
 }
 
 let dt = $("#exampletable").DataTable();
@@ -2685,12 +2697,12 @@ let dt = $("#exampletable").DataTable();
 //             $.each(data.data, function (index, value) {
 //                 table_body.html("");
 //                 $("#total_output").text("");
-            //     table_data += `<tr role="row">
-            //   <td class="sorting_1" tabindex="0">${value.date_logged}</td>
-            //   <td>${value.job_name}</td>
-            //   <td>${value.company_name}</td>
-            //     <td>${value.job_cost}</td>
-            // </tr>`;
+//     table_data += `<tr role="row">
+//   <td class="sorting_1" tabindex="0">${value.date_logged}</td>
+//   <td>${value.job_name}</td>
+//   <td>${value.company_name}</td>
+//     <td>${value.job_cost}</td>
+// </tr>`;
 //                 table_body.append(table_data);
 //             });
 //             $("#total_output").text("Total amount (GHS): " + data.total);

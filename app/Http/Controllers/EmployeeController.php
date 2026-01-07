@@ -37,7 +37,26 @@ class EmployeeController extends Controller
 
     public function employeeIndex()
     {
-        return view('employee.home');
+        $job_request = Job_Request::where('delete_status', 'NOT DELETED')->get();
+
+        $job_assignment = Job_Assignment::where('emp_id', Auth::user()->emp_id)
+            ->where('delete_status', 'NOT DELETED')
+            ->get();
+
+        $job_assignment_count = $job_assignment->whereIn('job_request_id', $job_request->pluck('job_request_id'))
+            ->count();
+
+        $job_completion_count = Job_Completion::where('delete_status', 'NOT DELETED')
+            ->whereIn('job_request_id', $job_assignment->pluck('job_assignment_id'))
+            ->get()
+            ->count();
+
+        $pending_jobs_count = $job_assignment->count() - $job_completion_count;
+
+        $client_count = Client::where('delete_status', 'NOT DELETED')->get()->count();
+        $activites_count = Activity::where('emp_id', Auth::user()->emp_id)->count();
+
+        return view('employee.home', compact('client_count', 'job_completion_count', 'job_assignment_count', 'pending_jobs_count', 'activites_count'));
     }
 
     public function employeeReports()
@@ -235,7 +254,7 @@ class EmployeeController extends Controller
                     Job_Assignment::where('job_assignment_id', $emp_assignment_id)->update(['assigned_by' => Auth::user()->emp_id]);
                     $employee = Employee::where('emp_id', $emp_id)->first();
                     $assigned_to = $employee->first_name . ' ' . $employee->last_name;
-                    
+
                     Mail::to($employee->company_email)->queue(new FirmusJobAssignedMail(
                         $assigned_to,
                         true,

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{Client, Employee, Job_Assignment, Job, Job_Request, Contact, Payment_Transaction};
+use App\Models\{Client, Employee, Job_Assignment, Job, Job_Request, Contact, Job_Completion, Payment_Transaction};
 use Carbon\Carbon;
 use Illuminate\Support\Facades\{DB, Auth, Response};
 
@@ -46,7 +46,7 @@ class ManagerController extends Controller
     public function firmus_new_clients()
     {
         //    	$date = Carbon::now();
-//    	$date = new Carbon();
+        //    	$date = new Carbon();
         $current_date = Carbon::now();
         $last_month = Carbon::now()->subDays(30);
         $new_client_information = Client::whereBetween('created_at', [$last_month->toDateTimeString(), $current_date->toDateTimeString()])
@@ -63,7 +63,6 @@ class ManagerController extends Controller
         $delete_detail = DB::table('clients')->where('client_id', $id)
             ->update(['delete_status' => 'DELETED']);
         return response()->json($delete_detail);
-
     }
 
 
@@ -86,7 +85,27 @@ class ManagerController extends Controller
 
     public function managerIndex($user)
     {
-        return view('manager.home', compact('user'));
+        $job_request = Job_Request::where('delete_status', 'NOT DELETED')->get();
+
+        $job_assignment = Job_Assignment::where('emp_id', Auth::user()->emp_id)
+            ->where('delete_status', 'NOT DELETED')
+            ->get();
+
+        $job_assignment_count = $job_assignment->whereIn('job_request_id', $job_request->pluck('job_request_id'))
+            ->count();
+
+        $job_completion_count = Job_Completion::where('delete_status', 'NOT DELETED')
+            ->whereIn('job_request_id', $job_assignment->pluck('job_assignment_id'))
+            ->get()
+            ->count();
+
+        $pending_jobs_count = $job_assignment->count() - $job_completion_count;
+
+        $client_count = Client::where('delete_status', 'NOT DELETED')->get()->count();
+        $employee_count = Employee::where('delete_status', 'NOT DELETED')->get()->count();
+        $job_request_count = $job_request->count();
+
+        return view('manager.home', compact('user', 'client_count', 'employee_count', 'pending_jobs_count', 'job_request_count'));
     }
 
     public function getStats()
@@ -106,7 +125,6 @@ class ManagerController extends Controller
             'contacts' => $contacts,
             'pending_payments' => $pending_payments
         ]);
-
     }
 
     public function managerMyJobs($user)
@@ -176,7 +194,5 @@ class ManagerController extends Controller
 
         // return response()->json(["data" => $test, "total" => $total]);
         return view('manager.reports', compact('user', 'report_data', 'total'));
-
     }
-
 }

@@ -26,59 +26,60 @@
 
         <div class="row text-center">
 
-            <div class="col-lg-2 col-md-4 col-sm-6">
+            <!-- <div class="col-lg-2 col-md-4 col-sm-6">
                 <div class="card-box widget-box-one">
                     <div class="wigdet-one-content">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow">Unassigned Jobs</p>
                         <h2 class="text-danger"><span id="unassingedJobStat" data-plugin="counterup">0</span></h2>
                     </div>
                 </div>
-            </div><!-- end col -->
+            </div> -->
+            <!-- end col -->
 
 
 
-            <div class="col-lg-2 col-md-4 col-sm-6">
+            <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="card-box widget-box-one">
                     <div class="wigdet-one-content">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow">Completed Jobs</p>
-                        <h2 class="text-success"><span id="completedJobStat" data-plugin="counterup">0</span></h2>
+                        <h2 class="text-success"><span id="completedJobStat" data-plugin="counterup">{{ $job_completion_count }}</span></h2>
                     </div>
                 </div>
             </div><!-- end col -->
 
-            <div class="col-lg-2 col-md-4 col-sm-6">
+            <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="card-box widget-box-one">
                     <div class="wigdet-one-content">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow">Pending Jobs</p>
-                        <h2 class="text-warning"><span id="pendingJobStat" data-plugin="counterup">0</span> </h2>
+                        <h2 class="text-warning"><span id="pendingJobStat" data-plugin="counterup">{{ $pending_jobs_count }}</span> </h2>
                     </div>
                 </div>
             </div><!-- end col -->
 
 
-            <div class="col-lg-2 col-md-4 col-sm-6">
+            <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="card-box widget-box-one">
                     <div class="wigdet-one-content">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow">Total Assigned Jobs</p>
-                        <h2 class="text-dark"><span id="assignedJobStat" data-plugin="counterup">0</span> </h2>
+                        <h2 class="text-dark"><span id="assignedJobStat" data-plugin="counterup">{{ $job_assignment_count }}</span> </h2>
                     </div>
                 </div>
             </div><!-- end col -->
 
-            <div class="col-lg-2 col-md-4 col-sm-6">
+            <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="card-box widget-box-one">
                     <div class="wigdet-one-content">
                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow">Total Activities</p>
-                        <h2 class="text-dark"><span id="activitiesStat" data-plugin="counterup">0</span> </h2>
+                        <h2 class="text-dark"><span id="activitiesStat" data-plugin="counterup">{{ $activites_count }}</span> </h2>
                     </div>
                 </div>
             </div><!-- end col -->
 
-            <div class="col-lg-2 col-md-4 col-sm-6">
+            <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="card-box widget-box-one">
                     <div class="wigdet-one-content">
-                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow">Contacts</p>
-                        <h2 class="text-danger"><span id="contactStat" data-plugin="counterup">0</span> </h2>
+                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow">Clients</p>
+                        <h2 class="text-danger"><span id="contactStat" data-plugin="counterup">{{ $client_count }}</span> </h2>
                     </div>
                 </div>
             </div><!-- end col -->

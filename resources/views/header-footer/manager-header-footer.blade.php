@@ -220,15 +220,15 @@
                             </li>
 
                             <li>
-                                <a href="{{ url('/manager-my-jobs/manager') }}" class="waves-effect"><i class="mdi mdi-layers"></i><span> Assigned Jobs </span></a>
+                                <a href="{{ url('/manager/my-jobs/manager') }}" class="waves-effect"><i class="mdi mdi-layers"></i><span> Assigned Jobs </span></a>
                             </li>
 
                             <li>
-                                <a href="{{ url('/manager-report/manager') }}" class="waves-effect"><i class="fa fa-line-chart"></i><span> Reports </span></a>
+                                <a href="{{ url('/manager/report/manager') }}" class="waves-effect"><i class="fa fa-line-chart"></i><span> Reports </span></a>
                             </li>
 
                             <li>
-                                <a href="{{ url('/manager-employees/manager') }}" class="waves-effect"><i class="fa fa-users"></i><span> Employees </span></a>
+                                <a href="{{ url('/manager/employees/manager') }}" class="waves-effect"><i class="fa fa-users"></i><span> Employees </span></a>
                             </li>
 
                             <li>
@@ -422,3 +422,4 @@
     </body>
 
 </html>
+

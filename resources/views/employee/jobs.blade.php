@@ -237,10 +237,7 @@
                                                         <table id="assigned_employees" class="table table-striped">
                                                         </table>
                                                     </div>
-
                                                 </div>
-
-
                                         </form>
                                     </div>
 
@@ -286,12 +283,23 @@
                                             </div>
                                             <div class="col-md-12">
                                                 <div class="form-group">
+                                                    <div class="checkbox checkbox-primary">
+                                                        <input id="send_email_notification" type="checkbox" checked name="send_email_notification" >
+                                                        <label for="send_email_notification">
+                                                            Send Email Notification to Client
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="email_section" class="col-md-12">
+                                                <div class="form-group">
                                                     <input class="form-control" list="clientsEmail" type="text" name="alt_email"  id="alt_email" placeholder="Enter alternative email (E.g. abcd@firmus.com)">
                                                     <datalist style="display:none" class="form-control" id="clientsEmail" >
 
                                                     </datalist>
                                                 </div>
                                             </div>
+
                                             </form>
 
                                             <div class="col-md-8">

@@ -25,17 +25,18 @@
 
                         <div class="row">
 
-                            <div class="col-lg-2 col-md-4 col-sm-6">
+                            <div class="col-lg-3 col-md-4 col-sm-6">
                                 <div class="card-box widget-box-one">
                                     <i class="mdi mdi-chart-areaspline widget-one-icon"></i>
                                     <div class="wigdet-one-content">
                                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">Total Jobs</p>
-                                        <h2><span id="jobStat" >0</span><small><i class="mdi mdi-arrow-up text-success"></i></small></h2>
+                                        <h2><span id="jobStat" >{{ $job_request_count }}</span><small><i class="mdi mdi-arrow-up text-success"></i></small></h2>
                                     </div>
                                 </div>
-                            </div><!-- end col -->
+                            </div>
+                            <!-- end col -->
 
-                            <div class="col-lg-2 col-md-4 col-sm-6">
+                            <!-- <div class="col-lg-3 col-md-4 col-sm-6">
                                 <div class="card-box widget-box-one">
                                     <i class="mdi mdi-account-convert widget-one-icon"></i>
                                     <div class="wigdet-one-content">
@@ -43,9 +44,10 @@
                                         <h2><span id="clientStat" >0</span><small><i class="mdi mdi-arrow-down text-danger"></i></small></h2>
                                     </div>
                                 </div>
-                            </div><!-- end col -->
+                            </div> -->
+                            <!-- end col -->
 
-                            <div class="col-lg-2 col-md-4 col-sm-6">
+                            <!-- <div class="col-lg-3 col-md-4 col-sm-6">
                                 <div class="card-box widget-box-one">
                                     <i class="mdi mdi-layers widget-one-icon"></i>
                                     <div class="wigdet-one-content">
@@ -53,34 +55,36 @@
                                         <h2><span id="pendingPaymentStat" >0</span><small><i class="mdi mdi-arrow-up text-success"></i></small></h2>
                                     </div>
                                 </div>
-                            </div><!-- end col -->
+                            </div> -->
+                            
+                            <!-- end col -->
 
-                            <div class="col-lg-2 col-md-4 col-sm-6">
+                            <div class="col-lg-3 col-md-4 col-sm-6">
                                 <div class="card-box widget-box-one">
                                     <i class="mdi mdi-av-timer widget-one-icon"></i>
                                     <div class="wigdet-one-content">
                                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Request Per Minute">Pending Jobs</p>
-                                        <h2><span id="pendingJobStat" >0</span> <small><i class="mdi mdi-arrow-down text-danger"></i></small></h2>
+                                        <h2><span id="pendingJobStat" >{{ $pending_jobs_count }}</span> <small><i class="mdi mdi-arrow-down text-danger"></i></small></h2>
                                     </div>
                                 </div>
                             </div><!-- end col -->
 
-                            <div class="col-lg-2 col-md-4 col-sm-6">
+                            <div class="col-lg-3 col-md-4 col-sm-6">
                                 <div class="card-box widget-box-one">
                                     <i class="mdi mdi-account-multiple widget-one-icon"></i>
                                     <div class="wigdet-one-content">
                                         <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Total Users">Total Employees</p>
-                                        <h2><span id="employeeStat" >0</span> <small><i class="mdi mdi-arrow-down text-danger"></i></small></h2>
+                                        <h2><span id="employeeStat" >{{ $employee_count }}</span> <small><i class="mdi mdi-arrow-down text-danger"></i></small></h2>
                                     </div>
                                 </div>
                             </div><!-- end col -->
 
-                            <div class="col-lg-2 col-md-4 col-sm-6">
+                            <div class="col-lg-3 col-md-4 col-sm-6">
                                 <div class="card-box widget-box-one">
                                     <i class="mdi mdi-download widget-one-icon"></i>
                                     <div class="wigdet-one-content">
-                                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="New Downloads">Contacts</p>
-                                        <h2><span id="contactStat" >0</span> <small><i class="mdi mdi-arrow-up text-success"></i></small></h2>
+                                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="New Downloads">Clients</p>
+                                        <h2><span id="contactStat" >{{ $client_count }}</span> <small><i class="mdi mdi-arrow-up text-success"></i></small></h2>
                                     </div>
                                 </div>
                             </div><!-- end col -->

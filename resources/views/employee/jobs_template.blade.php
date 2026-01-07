@@ -362,7 +362,7 @@
                                 <script type="text/javascript">
                                     var data = {
                                         {
-                                            DB::table('jobs') - > select('*') - > where('job_id', $job_request - > job_id) - > where('delete_status', 'NOT DELETED') - > get()
+                                            DB::table('jobs')->select('*')->where('job_id', $job_request->job_id)->where('delete_status', 'NOT DELETED')->get()
                                         }
                                     }
                                 </script>
@@ -383,7 +383,12 @@
                                 @else
                                 <td><button class="btn btn-primary waves-effect waves-danger" disabled>Assign Job</button></td>
                                 @endif
-                                <td><button type="button" id="deleteJobRequest" class="deleteJobRequest btn btn-danger waves-effect waves-danger " value="{{$job_request}}">Delete</button></td>
+                                  <td>
+                                     @if(Auth::user()->emp_id === $job_request->created_by)
+                                         <button type="button" id="deleteJobRequest" class="deleteJobRequest btn btn-danger waves-effect waves-danger " value="{{$job_request}}">Delete</button>
+                                     @endif
+                                </td>
+                               
                             </tr>
                             @endforeach
                         </tbody>
