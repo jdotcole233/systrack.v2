@@ -69,10 +69,12 @@
             <!-- datatable-buttons -->
             <thead>
               <tr>
+                <th>Reference#</th>
                 <th>Date of job logged in</th>
                 <th>Type of job</th>
                 <th>Client name</th>
-                <th>Amount (GHS)</th>
+                <th>Created By</th>
+                <!-- <th>Amount (GHS)</th> -->
                 <!-- <th>Issued Date</th>
                                                   <th>Expiry Date</th> -->
                 <!-- <th>Total Amount (Ghs)</th> -->
@@ -85,10 +87,12 @@
               @if (count($report_data) > 0)
                 @foreach ($report_data as $report)
                   <tr role="row">
+                    <td>{{ $report->reference_number }}</td>
                     <td class="sorting_1" tabindex="0">{{ $report->date_logged }}</td>
                     <td>{{ $report->job_name }}</td>
                     <td>{{ $report->company_name }}</td>
-                    <td>{{ number_format($report->job_cost, 2) }}</td>
+                    <td>{{ $report->first_name }} {{ $report->last_name }}</td>
+                    <!-- <td>{{ number_format($report->job_cost, 2) }}</td> -->
                   </tr>
                 @endforeach
               @endif
@@ -101,23 +105,7 @@
     </div>
   </div>
   <!-- end row -->
-  <div class="row">
-    <div class="col-md-12">
-      <div class="col-sm-12">
-        <div class="card-box ">
-          <div class="col-sm-4">
 
-          </div>
-          <div class="col-sm-4">
-
-          </div>
-          <div class="col-sm-4">
-            <h4 class="m-t-0 header-title pull-right" id="total_output">GHS {{ number_format($total, 2) }}</h4>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
 
 

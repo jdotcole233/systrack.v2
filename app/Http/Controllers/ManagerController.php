@@ -164,35 +164,37 @@ class ManagerController extends Controller
         if ($request->job_id == "allJobs") {
             $report_data = job_request::join('clients', 'job__requests.client_id', 'clients.client_id')
                 ->join('firmus_jobs', 'job__requests.job_id', 'firmus_jobs.job_id')
-                ->select("job__requests.created_at As date_logged", "job_name", "company_name", "job_cost", "job_request_id")
+                ->join('employees', 'job__requests.created_by', 'employees.emp_id')
+                ->select("job__requests.created_at As date_logged", "job_name", "company_name", "reference_number", "first_name", "last_name")
                 ->whereBetween('job__requests.created_at', [$request->from_date, $request->to_date])
                 ->latest('job__requests.created_at')
                 ->where('job__requests.delete_status', 'NOT DELETED')
                 ->get();
 
-            $total = job_request::whereBetween('job__requests.created_at', [$request->from_date, $request->to_date])
-                ->where('job__requests.delete_status', 'NOT DELETED')
-                ->sum("job_cost");
+            // $total = job_request::whereBetween('job__requests.created_at', [$request->from_date, $request->to_date])
+            //     ->where('job__requests.delete_status', 'NOT DELETED')
+            //     ->sum("job_cost");
         } else {
             $report_data = job_request::where('job__requests.job_id', $request->job_id)
                 ->join('clients', 'job__requests.client_id', 'clients.client_id')
                 ->join('firmus_jobs', 'job__requests.job_id', 'firmus_jobs.job_id')
-                ->select("job__requests.created_at As date_logged", "job_name", "company_name", "job_cost", "job_request_id")
+                ->join('employees', 'job__requests.created_by', 'employees.emp_id')
+                ->select("job__requests.created_at As date_logged", "job_name", "company_name", "reference_number", "first_name", "last_name")
                 ->whereBetween('job__requests.created_at', [$request->from_date, $request->to_date])
                 ->latest('job__requests.created_at')
                 ->where('job__requests.delete_status', 'NOT DELETED')
                 ->get();
 
-            $total = job_request::where('job__requests.job_id', $request->job_id)
-                ->whereBetween('job__requests.created_at', [$request->from_date, $request->to_date])
-                ->where('job__requests.delete_status', 'NOT DELETED')
-                ->sum("job_cost");
+            // $total = job_request::where('job__requests.job_id', $request->job_id)
+            //     ->whereBetween('job__requests.created_at', [$request->from_date, $request->to_date])
+            //     ->where('job__requests.delete_status', 'NOT DELETED')
+            //     ->sum("job_cost");
         }
 
 
         info($report_data);
 
         // return response()->json(["data" => $test, "total" => $total]);
-        return view('manager.reports', compact('user', 'report_data', 'total'));
+        return view('manager.reports', compact('user', 'report_data'));
     }
 }
