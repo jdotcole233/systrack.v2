@@ -98,7 +98,7 @@
 
                                     @foreach($my_jobs as $my_job)
                                         <tr id="tab{{$my_job->job_assignment_id}}">
-                                            <?php $job_id = DB::table('jobs')->join('job__requests','jobs.job_id','=','job__requests.job_id')->where('job_request_id',$my_job->job_request_id)->where('jobs.delete_status', 'NOT DELETED')->value('jobs.job_id');
+                                            <?php $job_id = DB::table('firmus_jobs')->join('job__requests','firmus_jobs.job_id','=','job__requests.job_id')->where('job_request_id',$my_job->job_request_id)->where('firmus_jobs.delete_status', 'NOT DELETED')->value('firmus_jobs.job_id');
                                             $s = DB::table('job__task__completions')->where('job_request_id',$my_job->job_request_id)->where('delete_status', 'NOT DELETED')->where('status', 'completed')->orderBy('created_at','desc')->first();
                                             $last = null;
                                             $now_last = null;
@@ -106,7 +106,7 @@
                                             <td style="display: none;" id="job_request_id_de">{{$my_job->job_request_id}}</td>
                                             <td id="tasks{{$my_job->job_request_id}}" style="display: none" >{{DB::table('tasks')->where('job_id', $job_id)->where('delete_status', 'NOT DELETED')->get()}}</td>
                                             <td id="reference_number">{{DB::table('job__requests')->where('job_request_id', $my_job->job_request_id)->where('delete_status', 'NOT DELETED')->value('reference_number')}}</td>
-                                            <td id="job_name">{{DB::table('jobs')->join('job__requests','jobs.job_id','=','job__requests.job_id')->where('job_request_id',$my_job->job_request_id)->where('jobs.delete_status', 'NOT DELETED')->value('job_name')}}</td>
+                                            <td id="job_name">{{DB::table('firmus_jobs')->join('job__requests','firmus_jobs.job_id','=','job__requests.job_id')->where('job_request_id',$my_job->job_request_id)->where('firmus_jobs.delete_status', 'NOT DELETED')->value('job_name')}}</td>
                                                 <input id="job_request_contact_information" value="{{DB::table('job__requests')->select('details')->where('client_id',DB::table('clients')->join('job__requests','clients.client_id','=','job__requests.client_id')->where('job_request_id',$my_job->job_request_id)->where('clients.delete_status', 'NOT DELETED')->value('job__requests.client_id'))->get()}}" type="hidden" style="display: none" >
 
                                                 <td id="company_name">{{DB::table('clients')->join('job__requests','clients.client_id','=','job__requests.client_id')->where('job_request_id',$my_job->job_request_id)->where('clients.delete_status', 'NOT DELETED')->value('company_name')}}</td>

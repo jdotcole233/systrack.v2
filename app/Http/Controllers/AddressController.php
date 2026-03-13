@@ -140,7 +140,7 @@ class AddressController extends Controller
                 if ($set_remainder_period == $currentDate && $status_renew == "NOT RENEWED") {
                     //getting necessary data to send Notification as Reminder
                     $manager_email = DB::table('employees')->where('emp_id', $renewal_date->created_by)->where('delete_status', 'NOT DELETED')->value('company_email');
-                    $job_name = DB::table('jobs')->where('delete_status', 'NOT DELETED')->where('job_id', $renewal_date->job_id)->value('job_name');
+                    $job_name = DB::table('firmus_jobs')->where('delete_status', 'NOT DELETED')->where('job_id', $renewal_date->job_id)->value('job_name');
                     $client_name = DB::table('clients')->where('delete_status', 'NOT DELETED')->where('client_id', $renewal_date->client_id)->value('company_name');
                     $client_acc_email = json_decode($renewal_date->details);
                     $emails_to_send = [$manager_email, $client_acc_email->EMAIL];

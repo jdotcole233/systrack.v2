@@ -68,7 +68,7 @@
                                                 ?>
                                                 <tr id="job_pay{{$job_request->job_request_id}}">
                                                     <td id="reference_number">{{$job_request->reference_number}}</td>
-                                                    <td id="job_title">{{ DB::table('jobs')->select('job_name')->where('job_id', $job_request->job_id)->first()->job_name}}</td>
+                                                    <td id="job_title">{{ DB::table('firmus_jobs')->select('job_name')->where('job_id', $job_request->job_id)->first()->job_name}}</td>
                                                     <td id="client" >{{ DB::table('clients')->select('company_name')->where('client_id', $job_request->client_id)->first()->company_name}}</td>
                                                     <td id="payment_status">{{$job_request->status}}</td>
                                                     <td id="job_cost" style="display: none">{{$job_request->job_cost}}</td>

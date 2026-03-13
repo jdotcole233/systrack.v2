@@ -139,7 +139,7 @@
 
 		<div class="col-md-12" style="height: 100px;"></div>
 		<div class="col-md-12" style="background-color: #36404e; color: #fff; padding-top: 10px; padding-bottom: 10px;">
-			<span id="job_reference">JOB # - {{$Job_Request->reference_number}}</span> <span class="pull-right" id="job_title">{{DB::table('jobs')->where('job_id', $Job_Request->job_id)->value('job_name')}}</span>
+			<span id="job_reference">JOB # - {{$Job_Request->reference_number}}</span> <span class="pull-right" id="job_title">{{DB::table('firmus_jobs')->where('job_id', $Job_Request->job_id)->value('job_name')}}</span>
 		</div>
 
 

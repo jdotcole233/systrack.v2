@@ -1,5 +1,5 @@
 <?php
- $job_id = DB::table('jobs')->join('job__requests','jobs.job_id','=','job__requests.job_id')->where('job_request_id',$job->job_request_id)->where('jobs.delete_status', 'NOT DELETED')->value('jobs.job_id');
+ $job_id = DB::table('firmus_jobs')->join('job__requests','firmus_jobs.job_id','=','job__requests.job_id')->where('job_request_id',$job->job_request_id)->where('firmus_jobs.delete_status', 'NOT DELETED')->value('firmus_jobs.job_id');
 $s = DB::table('job__task__completions')->where('job_request_id',$job->job_request_id)->where('delete_status', 'NOT DELETED')->orderBy('created_at','desc')->first();
 //dd($s);
     if($s != null) {
@@ -40,7 +40,7 @@ $s = DB::table('job__task__completions')->where('job_request_id',$job->job_reque
 <div class="col-md-4">
     <div class="form-group">
         <label for="field-2" class="control-label">Job Title</label>
-        <input name="job_id2" type="text" value="{{ DB::table('jobs')->select('job_name')->where('job_id', $job->job_id)->where('delete_status', 'NOT DELETED')->first()->job_name}}" class="form-control" id="field-2" readonly>
+        <input name="job_id2" type="text" value="{{ DB::table('firmus_jobs')->select('job_name')->where('job_id', $job->job_id)->where('delete_status', 'NOT DELETED')->first()->job_name}}" class="form-control" id="field-2" readonly>
     </div>
 </div>
 <div class="col-md-4">

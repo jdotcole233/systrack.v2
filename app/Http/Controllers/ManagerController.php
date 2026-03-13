@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\{Client, Employee, Job_Assignment, Job, Job_Request, Contact, Payment_Transaction};
+use App\Models\{Client, Employee, Job_Assignment, Job, Job_Request, Contact, Job_Completion, Payment_Transaction};
 use Carbon\Carbon;
 use Illuminate\Support\Facades\{DB, Auth, Response};
 
@@ -46,7 +46,7 @@ class ManagerController extends Controller
     public function firmus_new_clients()
     {
         //    	$date = Carbon::now();
-//    	$date = new Carbon();
+        //    	$date = new Carbon();
         $current_date = Carbon::now();
         $last_month = Carbon::now()->subDays(30);
         $new_client_information = Client::whereBetween('created_at', [$last_month->toDateTimeString(), $current_date->toDateTimeString()])
@@ -63,7 +63,6 @@ class ManagerController extends Controller
         $delete_detail = DB::table('clients')->where('client_id', $id)
             ->update(['delete_status' => 'DELETED']);
         return response()->json($delete_detail);
-
     }
 
 
@@ -86,7 +85,27 @@ class ManagerController extends Controller
 
     public function managerIndex($user)
     {
-        return view('manager.home', compact('user'));
+        $job_request = Job_Request::where('delete_status', 'NOT DELETED')->get();
+
+        $job_assignment = Job_Assignment::where('emp_id', Auth::user()->emp_id)
+            ->where('delete_status', 'NOT DELETED')
+            ->get();
+
+        $job_assignment_count = $job_assignment->whereIn('job_request_id', $job_request->pluck('job_request_id'))
+            ->count();
+
+        $job_completion_count = Job_Completion::where('delete_status', 'NOT DELETED')
+            ->whereIn('job_request_id', $job_assignment->pluck('job_assignment_id'))
+            ->get()
+            ->count();
+
+        $pending_jobs_count = $job_assignment->count() - $job_completion_count;
+
+        $client_count = Client::where('delete_status', 'NOT DELETED')->get()->count();
+        $employee_count = Employee::where('delete_status', 'NOT DELETED')->get()->count();
+        $job_request_count = $job_request->count();
+
+        return view('manager.home', compact('user', 'client_count', 'employee_count', 'pending_jobs_count', 'job_request_count'));
     }
 
     public function getStats()
@@ -106,7 +125,6 @@ class ManagerController extends Controller
             'contacts' => $contacts,
             'pending_payments' => $pending_payments
         ]);
-
     }
 
     public function managerMyJobs($user)
@@ -145,38 +163,38 @@ class ManagerController extends Controller
 
         if ($request->job_id == "allJobs") {
             $report_data = job_request::join('clients', 'job__requests.client_id', 'clients.client_id')
-                ->join('jobs', 'job__requests.job_id', 'jobs.job_id')
-                ->select("job__requests.created_at As date_logged", "job_name", "company_name", "job_cost", "job_request_id")
+                ->join('firmus_jobs', 'job__requests.job_id', 'firmus_jobs.job_id')
+                ->join('employees', 'job__requests.created_by', 'employees.emp_id')
+                ->select("job__requests.created_at As date_logged", "job_name", "company_name", "reference_number", "first_name", "last_name")
                 ->whereBetween('job__requests.created_at', [$request->from_date, $request->to_date])
                 ->latest('job__requests.created_at')
                 ->where('job__requests.delete_status', 'NOT DELETED')
                 ->get();
 
-            $total = job_request::whereBetween('job__requests.created_at', [$request->from_date, $request->to_date])
-                ->where('job__requests.delete_status', 'NOT DELETED')
-                ->sum("job_cost");
+            // $total = job_request::whereBetween('job__requests.created_at', [$request->from_date, $request->to_date])
+            //     ->where('job__requests.delete_status', 'NOT DELETED')
+            //     ->sum("job_cost");
         } else {
             $report_data = job_request::where('job__requests.job_id', $request->job_id)
                 ->join('clients', 'job__requests.client_id', 'clients.client_id')
-                ->join('jobs', 'job__requests.job_id', 'jobs.job_id')
-                ->select("job__requests.created_at As date_logged", "job_name", "company_name", "job_cost", "job_request_id")
+                ->join('firmus_jobs', 'job__requests.job_id', 'firmus_jobs.job_id')
+                ->join('employees', 'job__requests.created_by', 'employees.emp_id')
+                ->select("job__requests.created_at As date_logged", "job_name", "company_name", "reference_number", "first_name", "last_name")
                 ->whereBetween('job__requests.created_at', [$request->from_date, $request->to_date])
                 ->latest('job__requests.created_at')
                 ->where('job__requests.delete_status', 'NOT DELETED')
                 ->get();
 
-            $total = job_request::where('job__requests.job_id', $request->job_id)
-                ->whereBetween('job__requests.created_at', [$request->from_date, $request->to_date])
-                ->where('job__requests.delete_status', 'NOT DELETED')
-                ->sum("job_cost");
+            // $total = job_request::where('job__requests.job_id', $request->job_id)
+            //     ->whereBetween('job__requests.created_at', [$request->from_date, $request->to_date])
+            //     ->where('job__requests.delete_status', 'NOT DELETED')
+            //     ->sum("job_cost");
         }
 
 
         info($report_data);
 
         // return response()->json(["data" => $test, "total" => $total]);
-        return view('manager.reports', compact('user', 'report_data', 'total'));
-
+        return view('manager.reports', compact('user', 'report_data'));
     }
-
 }
