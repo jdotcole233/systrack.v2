@@ -82,11 +82,10 @@ $("#add_client").on("click", function (e) {
 });
 
 $("#add_client_employee").on("click", function (e) {
-
     let client_url = "/send_client_information/employee";
 
     if (location.pathname.includes("/employee/clients/employee")) {
-        client_url = "/employee/send_client_information/employee"
+        client_url = "/employee/send_client_information/employee";
     }
 
     swal({
@@ -287,7 +286,7 @@ $("#table_body").on("click", ".client_delete_info", function (e) {
 
     var url_delete = "/client_delete_information/" + client_del_id;
 
-        if (location.pathname.includes("/employee/clients/employee")) {
+    if (location.pathname.includes("/employee/clients/employee")) {
         url_delete = "/employee/client_delete_information/" + client_id;
     }
 

@@ -131,8 +131,9 @@ class EmployeeController extends Controller
 
     public function firmus_client_delete($id)
     {
-        $delete_detail = DB::table('clients')->where('client_id', $id)->update(['delete_status' => 'DELETED']);
-
+        $delete_detail = DB::table('clients')
+        ->where('client_id', $id)
+        ->update(['delete_status' => 'DELETED']);
 
         return response()->json($delete_detail);
 
