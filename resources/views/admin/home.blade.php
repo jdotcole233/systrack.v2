@@ -33,7 +33,7 @@
                                 <div class="card-box widget-box-two widget-two-primary">
                                     <i class="mdi mdi-chart-areaspline widget-two-icon"></i>
                                     <div class="wigdet-two-content">
-                                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">Total Enmployee</p>
+                                        <p class="m-0 text-uppercase font-600 font-secondary text-overflow" title="Statistics">Total Employee</p>
                                         <h2><span id="employeeStat" data-plugin="counterup">0</span> <small><i class="mdi mdi-arrow-up text-success"></i></small></h2>
                                     </div>
                                 </div>
