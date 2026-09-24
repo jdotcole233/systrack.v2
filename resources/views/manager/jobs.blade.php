@@ -396,7 +396,7 @@
                                 <!-- <td class="status">{{$job_request->status}}</td> -->
                                 <td>{{$job_request->created_at}}</td>
                                 <td><button data-toggle="modal" data-target="#view-custom-width-modal" type="button" id="view_job_details" class=" viewJob btn btn-success waves-effect waves-danger " value="{{$job_request->job_request_id}}">View Job</button></td>
-                                <td><button type="button" class="btn btn-warning waves-effect waves-warning edit_job_request" data-toggle="modal" data-target="#con-close-modal" onclick="document.getElementById('submit_job_request').style.display = 'none'; document.getElementById('edit_job_request').style.display = 'block'; edit('job_request_form',{{json_encode($job_request)}}, '{{route('editJobRequest')}}');">Edit</button></td>
+                                <td><button type="button" class="btn btn-warning waves-effect waves-warning edit_job_request" data-toggle="modal" data-target="#con-close-modal" onclick="document.getElementById('submit_job_request').style.display = 'none'; document.getElementById('edit_job_request').style.display = 'block'; edit('job_request_form',{{$job_request}}, '{{route('editJobRequest')}}');">Edit</button></td>
                                 @if($job_request->status != 'PENDING')
                                 <td><button data-toggle="modal" data-target="#custom-width-modal" type="button" id="assignJobRequest" class="assignJobRequest btn btn-primary waves-effect waves-danger " value="{{$job_request->job_request_id}}">Assign Job</button></td>
                                 @else

@@ -48,7 +48,7 @@ class FirstTimeController extends Controller
 
 	public function reset_user_password($user_id)
 	{
-		$default_password = '123456';
+		$default_password = '123456789';
 
 		User::where('emp_id', $user_id)->where('delete_status', 'NOT DELETED')->update(['password' => bcrypt($default_password), 'log_status' => 'FIRST CREATE']);
 

@@ -114,7 +114,7 @@
                                             <td>{{DB::table('employees')->where('emp_id', $my_job->assigned_by)->value('first_name')}} {{DB::table('employees')->where('emp_id', $my_job->assigned_by)->value('last_name')}}</td>
                                             <!-- <td id="assignment_status">{{$my_job->assignment_status}}</td> This use to be at Applicant column-->
 
-                                            <td id="assignment_status">{{ json_decode(DB::table('job__requests')->where('job_request_id', $my_job->job_request_id)->where('delete_status', 'NOT DELETED')->value('details'))->{"COMPANY NAME"} }}</td> <!-- This was changed to add the applicant name instead of job status -->
+                                            <td id="assignment_status">{{ $my_job->job_request->details['NAME OF APPLICANT'] ?? $my_job->job_request->details['APPLICANT NAME'] ?? "N/A"; }}</td> <!-- This was changed to add the applicant name instead of job status -->
                                             @if($s != null)
                                                 <?php
                                                 $task = DB::table('tasks')->where('task_id', $s->task_id + 1)->first();

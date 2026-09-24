@@ -13,4 +13,13 @@ class Job_Request extends Model
     {
         return $this->hasOne(Job::class, 'job_id', 'job_id');
     }
+
+    public function client(): HasOne
+    {
+        return $this->hasOne(Client::class, 'client_id', 'client_id');
+    }
+
+    protected $casts = [
+        'details' => 'array',
+    ];
 }

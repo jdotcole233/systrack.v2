@@ -101,6 +101,7 @@ class SystemAdminController extends Controller
 
     public function edit_job(Request $request)
     {
+        info("request ". json_encode($request->all()));
         Job::where('job_id', '=', $request->input('job_id'))->update($request->except('job_id', '_token', 'task', 'tasks'));
         //        Task::create($request->except('_token'));
         $data = Job::where('job_id', $request->input('job_id'))->first();
@@ -117,7 +118,7 @@ class SystemAdminController extends Controller
 
     public function view_jobs($user)
     {
-        $jobs = Job::orderBy('created_at', 'desc')->get();
+        $jobs = Job::orderBy('created_at', 'desc')->where('delete_status', 'NOT DELETED')->get();
         return view('admin.jobs', compact('jobs', 'user'));
     }
 

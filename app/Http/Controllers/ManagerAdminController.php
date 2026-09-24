@@ -37,7 +37,10 @@ class ManagerAdminController extends Controller
 
     public function addJobRequest(Request $request)
     {
-        $new_job_added = Job_Request::create($request->all());
+        $request_data = $request->all();
+        $request_details = json_decode($request_data['details'], true);
+        $request_data['details'] = $request_details;
+        $new_job_added = Job_Request::create($request_data);
         $job_name = DB::table('firmus_jobs')->select('job_name')
             ->where('job_id', $new_job_added->job_id)
             ->where('delete_status', 'NOT DELETED')

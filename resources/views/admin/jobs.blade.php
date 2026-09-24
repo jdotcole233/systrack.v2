@@ -151,8 +151,8 @@
                         </td>
                         <td>{{$job->created_at}}</td>
                         <td>{{$job->updated_at}}</td>
-                        <td><button type="button" class="btn btn-warning waves-effect waves-warning" data-toggle="modal" data-target="#con-close-modal" onclick="edit('job',{{json_encode($job)}}, {{DB::table('tasks')->where('job_id', $job->job_id)->get()}}); document.getElementById('addTask').style.display = 'none'; document.getElementById('addJob').style.display = 'none'; document.getElementById('save').style.display = 'block'; j = document.getElementById('details').children.length; k = document.getElementById('tasks').children.length;" >Edit</button></td>
-                        <td><button type="button" value="{{$job}}" class="deleteJob btn btn-danger waves-effect waves-danger ">Delete</button></td>
+                        <td><button type="button" class="btn btn-warning waves-effect waves-warning" data-toggle="modal" data-target="#con-close-modal" onclick="edit('job',{{json_encode($job)}}, {{DB::table('tasks')->where('delete_status', 'NOT DELETED')->where('job_id', $job->job_id)->get()}}); document.getElementById('addTask').style.display = 'none'; document.getElementById('addJob').style.display = 'none'; document.getElementById('save').style.display = 'block'; j = document.getElementById('details').children.length; k = document.getElementById('tasks').children.length;" >Edit</button></td>
+                        <td><button type="button" onclick="deleteJob({{$job}})" class="deleteJob btn btn-danger waves-effect waves-danger"  value="{{$job}}" >Delete</button></td>
 
                     </tr>
                     @endforeach

@@ -58,7 +58,7 @@ function addRemove(id) {
     var remove_id = "#" + id;
     $(remove_id).remove();
     if (!isNaN(Number(id))) {
-        alert(Number(id));
+        // alert(Number(id));
         $("#removed_tasks").append(
             '<input class="removed_add" type="hidden" value="' +
                 Number(id) +
@@ -104,7 +104,7 @@ function parses(id) {
         document.getElementById(id.substring(0, id.length - 1)).value = "";
     }
 
-    // console.log(string);
+    console.log(string);
 }
 function traverse(node, data) {
     console.log(data);
@@ -141,7 +141,7 @@ function populate(map, id, data) {
     clear(id + "s");
     map.forEach(function (value, key) {
         if (document.getElementsByName(key)[0].id == id) {
-            var details = JSON.parse(data[key]);
+            var details = data[key];
             Object.keys(details).forEach(function (key) {
                 add(id + "s", key, details[key]);
             });
@@ -299,6 +299,7 @@ $("#save").on("click", function (e) {
                             },
                         });
                     }
+                    window.location.reload();
                 },
                 error: function () {
                     // swal("error");
@@ -427,8 +428,78 @@ $("#addJob").on("click", function (e) {
     });
 });
 
-$(".deleteJob").on("click", function (e) {
-    data = JSON.parse($(this).val());
+// $("#job_request_tbody .deleteJob").on("click", function (e) {
+//     alert("Are you sure you want to delete this job? This action is irreversible");
+//     data = JSON.parse($(this).val());
+//     delet("job", data, "action");
+
+//     swal({
+//         title: "Are you sure?",
+//         text: "Once a job is deleted, you will not be able to recover!",
+//         icon: "warning",
+//         buttons: true,
+//         dangerMode: true,
+//     }).then((willDelete) => {
+//         if (willDelete) {
+//             $.ajaxSetup({
+//                 headers: {
+//                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
+//                         "content"
+//                     ),
+//                 },
+//             });
+
+//             e.preventDefault();
+
+//             $.ajax({
+//                 method: "post",
+//                 data: $("#job").serialize(),
+//                 url: "/admin/delete_jobs",
+//                 success: function (data) {
+//                     $.ajaxSetup({
+//                         headers: {
+//                             "X-CSRF-TOKEN": $('meta[name="csrf_token"]').attr(
+//                                 "content"
+//                             ),
+//                         },
+//                     });
+//                     $.ajax({
+//                         method: "POST",
+//                         dataType: "json",
+//                         url: "/notification/send",
+//                         data: {
+//                             message:
+//                                 "Job" + data.data.job_name + "has been deleted",
+//                             subject: "Job Deleted",
+//                             check: "position",
+//                             condition: "<>",
+//                             reciever: "1",
+//                         },
+//                         success: function (data) {
+//                             console.log("success");
+//                         },
+//                         error: function (data) {
+//                             console.log("error");
+//                         },
+//                     });
+//                     $("#Job" + data["job_id"]).remove();
+//                     swal("Client removed");
+//                 },
+//                 error: function () {
+//                     swal("error");
+//                     // console.log("error");
+//                 },
+//             });
+//         } else {
+//             swal("Job Not deleted");
+//         }
+//     });
+// });
+
+
+function deleteJob (job) {
+    data = job;
+    console.log(data);
     delet("job", data, "action");
 
     swal({
@@ -447,12 +518,12 @@ $(".deleteJob").on("click", function (e) {
                 },
             });
 
-            e.preventDefault();
+            // e.preventDefault();
 
             $.ajax({
                 method: "post",
                 data: $("#job").serialize(),
-                url: "/admin-delete_jobs",
+                url: "/admin/delete_jobs",
                 success: function (data) {
                     $.ajaxSetup({
                         headers: {
@@ -481,7 +552,7 @@ $(".deleteJob").on("click", function (e) {
                         },
                     });
                     $("#Job" + data["job_id"]).remove();
-                    swal("Client removed");
+                    swal("Job removed");
                 },
                 error: function () {
                     swal("error");
@@ -492,7 +563,8 @@ $(".deleteJob").on("click", function (e) {
             swal("Job Not deleted");
         }
     });
-});
+}
+
 
 // .forEach(function (value) {
 //     console.log(value);

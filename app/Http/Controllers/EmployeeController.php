@@ -28,7 +28,7 @@ class EmployeeController extends Controller
 
     public function employeeJobs($user)
     {
-        $my_jobs = Job_Assignment::where('emp_id', Auth::user()->emp_id)
+        $my_jobs = Job_Assignment::with(['job_request'])->where('emp_id', Auth::user()->emp_id)
             ->where('delete_status', 'NOT DELETED')
             ->orderBy('created_at', 'desc')
             ->get();
@@ -180,7 +180,10 @@ class EmployeeController extends Controller
 
     public function addJobRequest(Request $request)
     {
-        $new_job_added = Job_Request::create($request->all());
+        $request_data = $request->all();
+        $request_details = json_decode($request_data['details'], true);
+        $request_data['details'] = $request_details;
+        $new_job_added = Job_Request::create($request_data);
         $job_name = DB::table('firmus_jobs')->select('job_name')->where('job_id', $new_job_added->job_id)->where('delete_status', 'NOT DELETED')->first()->job_name;
         Job_Request::where('job_request_id', $new_job_added->id)->update(['created_by' => Auth::user()->emp_id, 'renewal_status' => 'NOT RENEWED']);
         $client_name = DB::table('clients')->select('company_name')->where('client_id', $new_job_added->client_id)->where('delete_status', 'NOT DELETED')->first()->company_name;
