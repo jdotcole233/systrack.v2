@@ -103,17 +103,29 @@
                                 <div id="details">
 
                                 </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="field-2" class="control-label">Client</label>
-                                        <select name="client_id" class="form-control" id="client_detail">
-                                            <option value="">Select Client</option>
-                                            @foreach($clients as $client)
-                                            <option value="{{$client->client_id}}">{{$client->company_name}}</option>
-                                            @endforeach
-                                        </select>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="field-2" class="control-label">Client</label>
+                                            <select name="client_id" class="form-control" id="client_detail">
+                                                <option value="">Select Client</option>
+                                                @foreach($clients as $client)
+                                                <option value="{{$client->client_id}}">{{$client->company_name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="field-1" class="control-label">Start Date</label>
+                                            <input name="start_date" type="date" class="form-control" id="job_request_start_date" required>
+                                        </div>
                                     </div>
                                 </div>
+
+
                             </div>
                             <div class="row">
 
@@ -367,7 +379,7 @@
                                     }
                                 </script>
                                 <td id="job_id_get">{{ DB::table('firmus_jobs')->select('job_name')->where('job_id', $job_request->job_id)->where('delete_status', 'NOT DELETED')->value('job_name')}}</td>
-                                <td>{{ DB::table('clients')->select('company_name')->where('client_id', $job_request->client_id)->where('delete_status', 'NOT DELETED')->value('company_name')}}</td>
+                                <td>{{ DB::table('clients')->select('company_name')->where('client_id', $job_request->client_id)->where('delete_status', 'NOT DELETED')->value('company_name')}} {{ $job_request->applicant_name  ?? 'N/A' }}</td>
                                 <td>{{DB::table('employees')->where('emp_id', $job_request->created_by)->value('first_name')}} {{DB::table('employees')->where('emp_id', $job_request->created_by)->value('last_name')}}</td>
                                 <td>
                                     @foreach($employees as $employee)
@@ -375,7 +387,7 @@
                                     @endforeach
                                 </td>
                                 <!-- <td class="status">{{$job_request->status}}</td> -->
-                                <td>{{$job_request->created_at}}</td>
+                                <td>{{$job_request->start_date}}</td>
                                 <td><button data-toggle="modal" data-target="#view-custom-width-modal" type="button" id="view_job_details" class=" viewJob btn btn-success waves-effect waves-danger " value="{{$job_request->job_request_id}}">View Job</button></td>
                                 <td><button type="button" class="btn btn-warning waves-effect waves-warning edit_job_request" data-toggle="modal" data-target="#con-close-modal" onclick="document.getElementById('submit_job_request').style.display = 'none'; document.getElementById('edit_job_request').style.display = 'block'; edit('job_request_form',{{$job_request}}, '{{route('editJobRequest')}}');">Edit</button></td>
                                 @if($job_request->status != 'PENDING')
@@ -383,12 +395,12 @@
                                 @else
                                 <td><button class="btn btn-primary waves-effect waves-danger" disabled>Assign Job</button></td>
                                 @endif
-                                  <td>
-                                     @if(Auth::user()->emp_id === $job_request->created_by)
-                                         <button type="button" id="deleteJobRequest" class="deleteJobRequest btn btn-danger waves-effect waves-danger " value="{{$job_request}}">Delete</button>
-                                     @endif
+                                <td>
+                                    @if(Auth::user()->emp_id === $job_request->created_by)
+                                    <button type="button" id="deleteJobRequest" class="deleteJobRequest btn btn-danger waves-effect waves-danger " value="{{$job_request}}">Delete</button>
+                                    @endif
                                 </td>
-                               
+
                             </tr>
                             @endforeach
                         </tbody>

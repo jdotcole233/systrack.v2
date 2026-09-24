@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+
 
 class Job_Request extends Model
 {
-    protected $fillable = ['client_id', 'job_id', 'status', 'job_priority', 'reference_number', 'details', 'job_cost', 'delete_status', 'created_by'];
+    protected $fillable = ['client_id', 'job_id', 'status', 'job_priority', 'reference_number', 'details', 'job_cost', 'delete_status', 'created_by', 'start_date', 'hash_check'];
 
     public function job(): HasOne
     {
@@ -22,4 +24,19 @@ class Job_Request extends Model
     protected $casts = [
         'details' => 'array',
     ];
+
+    protected function applicantName(): Attribute
+    {
+        return Attribute::get(function () {
+            $details = $this->details ?? [];
+
+            foreach (['COMPANY NAME', 'NAME', 'APPLICANT', 'APPLICANT NAME'] as $key) {
+                if (filled($details[$key] ?? null)) {
+                    return $details[$key];
+                }
+            }
+
+            return null;
+        });
+    }
 }

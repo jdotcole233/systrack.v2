@@ -585,6 +585,7 @@ $("#submit_job_request").on("click", function (e) {
     parses("details");
     var info = JSON.parse($("#jobsMenu").val());
 
+
     // document.getElementById('jobsMenu').options[document.getElementById('jobsMenu').selectedIndex].value = info.job_id;
 
     $.ajaxSetup({
@@ -671,9 +672,10 @@ $("#submit_job_request").on("click", function (e) {
                     });
                     window.location.reload();
                 },
-                error: function () {
+                error: function (err) {
+                    console.log(err);
                     $("#loading_progress").modal("hide");
-                    swal("There was a problem making job request..");
+                    swal(err?.responseJSON['message']);
                 },
             });
         } else {

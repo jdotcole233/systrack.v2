@@ -107,15 +107,26 @@
                                 <div id="details">
 
                                 </div>
-                                <div class="col-md-12">
-                                    <div class="form-group">
-                                        <label for="field-2" class="control-label">Client</label>
-                                        <select name="client_id" class="form-control" id="client_detail">
-                                            <option value="">Select Client</option>
-                                            @foreach($clients as $client)
-                                            <option value="{{$client->client_id}}">{{$client->company_name}}</option>
-                                            @endforeach
-                                        </select>
+
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="field-2" class="control-label">Client</label>
+                                            <select name="client_id" class="form-control" id="client_detail">
+                                                <option value="">Select Client</option>
+                                                @foreach($clients as $client)
+                                                <option value="{{$client->client_id}}">{{$client->company_name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="field-1" class="control-label">Start Date</label>
+                                            <input name="job_request_start_date" type="date" class="form-control" id="job_request_start_date" required>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -386,7 +397,7 @@
 
 
 
-                                <td>{{ DB::table('clients')->select('company_name')->where('client_id', $job_request->client_id)->where('delete_status', 'NOT DELETED')->value('company_name')}}</td>
+                                <td>{{ DB::table('clients')->select('company_name')->where('client_id', $job_request->client_id)->where('delete_status', 'NOT DELETED')->value('company_name')}} - {{ $job_request->applicant_name  ?? 'N/A' }}</td>
                                 <td>{{DB::table('employees')->where('emp_id', $job_request->created_by)->value('first_name')}} {{DB::table('employees')->where('emp_id', $job_request->created_by)->value('last_name')}}</td>
                                 <td>
                                     @foreach($employees as $employee)

@@ -15,8 +15,9 @@ use App\Models\{
     Job,
     Employee,
 };
+use App\Utilities\Utilities;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\{Auth, DB, Mail, Response, View};
+use Illuminate\Support\Facades\{Auth, DB, Hash, Mail, Response, View};
 use Carbon\Carbon;
 
 class EmployeeController extends Controller
@@ -151,8 +152,8 @@ class EmployeeController extends Controller
     public function firmus_client_delete($id)
     {
         $delete_detail = DB::table('clients')
-        ->where('client_id', $id)
-        ->update(['delete_status' => 'DELETED']);
+            ->where('client_id', $id)
+            ->update(['delete_status' => 'DELETED']);
 
         return response()->json($delete_detail);
     }
@@ -160,9 +161,11 @@ class EmployeeController extends Controller
 
     public function viewJobRequests($user)
     {
+        $employee_id = Auth::user()->emp_id;
         $job_requests = Job_Request::join('firmus_jobs', 'job__requests.job_id', 'firmus_jobs.job_id')
             ->where('firmus_jobs.delete_status', 'NOT DELETED')
             ->where('job__requests.delete_status', 'NOT DELETED')
+            ->where('created_by', $employee_id)
             ->select('job__requests.*')
             ->orderBy('job__requests.created_at', 'DESC')
             ->get();
@@ -181,8 +184,24 @@ class EmployeeController extends Controller
     public function addJobRequest(Request $request)
     {
         $request_data = $request->all();
-        $request_details = json_decode($request_data['details'], true);
+        $request_details = json_decode($request_data['details'] ?? '{}', true) ?? [];
         $request_data['details'] = $request_details;
+
+        // Build the fingerprint from the decoded/normalised data
+        $prepare_data = collect($request_data)
+            ->except(['_token', 'reference_number', 'job_request_id', 'hash_check'])
+            ->toArray();
+
+        $data_hash = hash('sha256', json_encode(Utilities::normalizeForHash($prepare_data)));
+
+        if (Job_Request::where('hash_check', $data_hash)->exists()) {
+            return response()->json(['message' => 'Duplicate job request found...'], 409);
+        }
+
+        $request_data['hash_check'] = $data_hash;
+
+        // dd($prepare_data, $data_hash);
+
         $new_job_added = Job_Request::create($request_data);
         $job_name = DB::table('firmus_jobs')->select('job_name')->where('job_id', $new_job_added->job_id)->where('delete_status', 'NOT DELETED')->first()->job_name;
         Job_Request::where('job_request_id', $new_job_added->id)->update(['created_by' => Auth::user()->emp_id, 'renewal_status' => 'NOT RENEWED']);

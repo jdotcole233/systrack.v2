@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\{Employee, Job_Assignment, Job_Task_Completion, Job_Request, Client, Job, Payment_Transaction};
+use App\Utilities\Utilities;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\{DB, Auth, Response, View};
+use Illuminate\Support\Facades\{DB, Auth, Hash, Response, View};
 
 class ManagerAdminController extends Controller
 {
@@ -38,8 +39,24 @@ class ManagerAdminController extends Controller
     public function addJobRequest(Request $request)
     {
         $request_data = $request->all();
-        $request_details = json_decode($request_data['details'], true);
+        $request_details = json_decode($request_data['details'] ?? '{}', true) ?? [];
         $request_data['details'] = $request_details;
+
+        // Build the fingerprint from the decoded/normalised data
+        $prepare_data = collect($request_data)
+            ->except(['_token', 'reference_number', 'job_request_id', 'hash_check'])
+            ->toArray();
+
+        $data_hash = hash('sha256', json_encode(Utilities::normalizeForHash($prepare_data)));
+
+        if (Job_Request::where('hash_check', $data_hash)->exists()) {
+            return response()->json(['message' => 'Duplicate job request found...'], 409);
+        }
+
+        $request_data['hash_check'] = $data_hash;
+
+        dd($prepare_data, $data_hash);
+
         $new_job_added = Job_Request::create($request_data);
         $job_name = DB::table('firmus_jobs')->select('job_name')
             ->where('job_id', $new_job_added->job_id)
