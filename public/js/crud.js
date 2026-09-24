@@ -62,7 +62,7 @@ function addRemove(id) {
         $("#removed_tasks").append(
             '<input class="removed_add" type="hidden" value="' +
                 Number(id) +
-                '"  />'
+                '"  />',
         );
     }
 }
@@ -253,7 +253,7 @@ $("#save").on("click", function (e) {
                         $.ajaxSetup({
                             headers: {
                                 "X-CSRF-TOKEN": $(
-                                    'meta[name="csrf_token"]'
+                                    'meta[name="csrf_token"]',
                                 ).attr("content"),
                             },
                         });
@@ -334,7 +334,7 @@ $("#addJob").on("click", function (e) {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -357,7 +357,7 @@ $("#addJob").on("click", function (e) {
                         $.ajaxSetup({
                             headers: {
                                 "X-CSRF-TOKEN": $(
-                                    'meta[name="csrf_token"]'
+                                    'meta[name="csrf_token"]',
                                 ).attr("content"),
                             },
                         });
@@ -381,7 +381,7 @@ $("#addJob").on("click", function (e) {
                             error: function (data) {
                                 $("#loading_progress").modal("hide");
                                 console.log(
-                                    "Error sending notifaction for new added job"
+                                    "Error sending notifaction for new added job",
                                 );
                             },
                         });
@@ -442,7 +442,7 @@ $(".deleteJob").on("click", function (e) {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -457,7 +457,7 @@ $(".deleteJob").on("click", function (e) {
                     $.ajaxSetup({
                         headers: {
                             "X-CSRF-TOKEN": $('meta[name="csrf_token"]').attr(
-                                "content"
+                                "content",
                             ),
                         },
                     });
@@ -572,7 +572,7 @@ $("#submit_job_request").on("click", function (e) {
                     $.ajaxSetup({
                         headers: {
                             "X-CSRF-TOKEN": $('meta[name="csrf_token"]').attr(
-                                "content"
+                                "content",
                             ),
                         },
                     });
@@ -646,7 +646,7 @@ $("#edit_job_request").on("click", function (e) {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -667,7 +667,7 @@ $("#edit_job_request").on("click", function (e) {
                     $.ajaxSetup({
                         headers: {
                             "X-CSRF-TOKEN": $('meta[name="csrf_token"]').attr(
-                                "content"
+                                "content",
                             ),
                         },
                     });
@@ -728,7 +728,7 @@ $("#datatable-buttons").on("click", ".deleteJobRequest", function (e) {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -753,7 +753,7 @@ $("#datatable-buttons").on("click", ".deleteJobRequest", function (e) {
                     $.ajaxSetup({
                         headers: {
                             "X-CSRF-TOKEN": $('meta[name="csrf_token"]').attr(
-                                "content"
+                                "content",
                             ),
                         },
                     });
@@ -917,7 +917,7 @@ $("#assignJobRequestSend").on("click", function (e) {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf_token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -985,7 +985,7 @@ function filldatalist(prefix) {
         for (i = 0; i < optionsarray.length; i++) {
             if (prefix.indexOf(optionsarray[i]) < 0) {
                 datalist.append(
-                    '<option value="' + prefix + optionsarray[i] + '">'
+                    '<option value="' + prefix + optionsarray[i] + '">',
                 );
             }
         }
@@ -998,18 +998,17 @@ function filldatalist(prefix) {
 // var eDatalist;
 
 $(".progress_button").on("click", function () {
-    JSON.parse($("#job_request_contact_information").val()).forEach(function (
-        value,
-        key
-    ) {
-        $("#clientsEmail").append(
-            "<option value=" +
-                JSON.parse(value.details)["EMAIL"] +
-                ">" +
-                JSON.parse(value.details)["COMPANY NAME"] +
-                "</option>"
-        );
-    });
+    JSON.parse($("#job_request_contact_information").val()).forEach(
+        function (value, key) {
+            $("#clientsEmail").append(
+                "<option value=" +
+                    JSON.parse(value.details)["EMAIL"] +
+                    ">" +
+                    JSON.parse(value.details)["COMPANY NAME"] +
+                    "</option>",
+            );
+        },
+    );
 
     datalist = jQuery("datalist");
     options = jQuery("datalist option");
@@ -1024,7 +1023,11 @@ $(".progress_button").on("click", function () {
     $("#assigned_employees").html("");
     details.forEach(function (value, key) {
         $("#assigned_employees").append(
-            "<tr><td>" + value.first_name + " " + value.last_name + "</td></tr>"
+            "<tr><td>" +
+                value.first_name +
+                " " +
+                value.last_name +
+                "</td></tr>",
         );
     });
 
@@ -1036,7 +1039,7 @@ $(".progress_button").on("click", function () {
             $("#stages").append(
                 '<li class="task_info active" onmouseout="unshow()"  onmouseover="hover(this.id)" id=" ' +
                     _.capitalize(value.task_name) +
-                    ' "> </li>'
+                    ' "> </li>',
             );
             bool = true;
         } else if (!bool) {
@@ -1044,14 +1047,14 @@ $(".progress_button").on("click", function () {
                 '<li  class="task_info cc active" onmouseout="unshow()" onmouseover="hover(this.id)" id=" ' +
                     _.capitalize(value.task_name) +
                     ' ">' +
-                    "</li>"
+                    "</li>",
             );
         } else if (bool) {
             $("#stages").append(
                 '<li  class="task_info" onmouseout="unshow()" onmouseover="hover(this.id)" id=" ' +
                     _.capitalize(value.task_name) +
                     ' ">' +
-                    "</li>"
+                    "</li>",
             );
         }
 
@@ -1067,7 +1070,7 @@ $(".progress_button").on("click", function () {
     var job_assignment_id = $(this).parent().parent().attr("id");
     job_assignment_id = job_assignment_id.substring(
         3,
-        job_assignment_id.length
+        job_assignment_id.length,
     );
 
     $("#task_job_assignment_id").val(job_assignment_id);
@@ -1096,11 +1099,11 @@ $(".close_clear").click(function () {
     clearInterval(intervalMessage);
 });
 
-$('#send_email_notification').click(function () {
-    if ($(this).is(':checked')) {
-        $('#email_section').show();
+$("#send_email_notification").click(function () {
+    if ($(this).is(":checked")) {
+        $("#email_section").show();
     } else {
-        $('#email_section').hide();
+        $("#email_section").hide();
     }
 });
 
@@ -1108,7 +1111,7 @@ $("#sendTasksUpdate").click(function () {
     // $('#client_remark').val($('#current_task_form').val());
     $("#renewal_date_o").val($("#renewal_date_proxy").val());
     // $('#client_remark').val($('#current_task_form').val());
-    let send_email_option = $('#send_email_notification').is(':checked');
+    let send_email_option = $("#send_email_notification").is(":checked");
 
     if ($("#field-5").val() == " ") {
         $("#field-5").css("border", "1px solid red");
@@ -1116,20 +1119,20 @@ $("#sendTasksUpdate").click(function () {
     } else if ($("#client_remarks").val() == "") {
         $("#client_remarks").css("border", "1px solid red");
         return;
-    } else if ($("#alt_email").val() == "") {
+    } else if (send_email_option && $("#alt_email").val() == "") {
         $("#alt_email").css("border", "1px solid red");
         return;
     }
 
     var client_email = $("#alt_email").val();
 
-    if ($("#alt_email").val() == "") {
-        client_email = "abcd@firmus.com";
-    }
+    // if ($("#alt_email").val() == "") {
+    //     client_email = "abcd@firmus.com";
+    // }
 
     swal({
         title: "Task Update",
-        text: `Attempting updating status of this task\nAn email notification will be sent ${client_email}`,
+        text: `Attempting updating status of this task\n${send_email_option ? `An email notification will be sent ${client_email}` : ""}`,
         icon: "warning",
         buttons: true,
         dangerMode: true,
@@ -1139,7 +1142,7 @@ $("#sendTasksUpdate").click(function () {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -1161,7 +1164,7 @@ $("#sendTasksUpdate").click(function () {
                         $.ajaxSetup({
                             headers: {
                                 "X-CSRF-TOKEN": $(
-                                    'meta[name="csrf_token"]'
+                                    'meta[name="csrf_token"]',
                                 ).attr("content"),
                             },
                         });
@@ -1250,7 +1253,7 @@ $("#enter_meeting").on("click", function (e) {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -1272,7 +1275,7 @@ $("#enter_meeting").on("click", function (e) {
                     $.ajaxSetup({
                         headers: {
                             "X-CSRF-TOKEN": $('meta[name="csrf_token"]').attr(
-                                "content"
+                                "content",
                             ),
                         },
                     });
@@ -1332,7 +1335,7 @@ function emp_remove(id) {
                 id +
                 '" class="job_assignment_id" type="hidden" value="' +
                 class_job_assingment_id +
-                '"  />'
+                '"  />',
         );
         // console.log('done');
     }
@@ -1421,20 +1424,19 @@ $("#update_btn_minutes").click(function () {
 
     var old_employee = "{";
 
-    $('#invited_employees tr[class="remove_them_moimoi"]').each(function (
-        i,
-        v
-    ) {
-        var string = $(this).attr("id");
-        var name_attendee = $(this).attr("name");
-        try {
-            var id = string.substring(5, string.length);
-        } catch (exception) {
-            return;
-        }
+    $('#invited_employees tr[class="remove_them_moimoi"]').each(
+        function (i, v) {
+            var string = $(this).attr("id");
+            var name_attendee = $(this).attr("name");
+            try {
+                var id = string.substring(5, string.length);
+            } catch (exception) {
+                return;
+            }
 
-        old_employee += '"' + id + '" : ' + '"' + name_attendee + '", ';
-    });
+            old_employee += '"' + id + '" : ' + '"' + name_attendee + '", ';
+        },
+    );
 
     old_employee =
         old_employee.substring(0, old_employee.lastIndexOf(",")) + "}";
@@ -1451,7 +1453,7 @@ $("#update_btn_minutes").click(function () {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -1482,7 +1484,7 @@ $("#update_btn_minutes").click(function () {
                     $.ajaxSetup({
                         headers: {
                             "X-CSRF-TOKEN": $('meta[name="csrf_token"]').attr(
-                                "content"
+                                "content",
                             ),
                         },
                     });
@@ -1591,7 +1593,7 @@ $("#update_btn_minutes").click(function () {
                                         console.log("error");
                                     },
                                 });
-                            }
+                            },
                         );
                     }
 
@@ -1665,7 +1667,7 @@ $(".cancel_meeting").click(function (e) {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -1686,7 +1688,7 @@ $(".cancel_meeting").click(function (e) {
                     $.ajaxSetup({
                         headers: {
                             "X-CSRF-TOKEN": $('meta[name="csrf_token"]').attr(
-                                "content"
+                                "content",
                             ),
                         },
                     });
@@ -1769,7 +1771,7 @@ $("#pay_btn").on("click", function (e) {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -1785,12 +1787,12 @@ $("#pay_btn").on("click", function (e) {
                     $("[name=job_cost]").val(job_cost - amount_paid);
                     // $('[name=been_payed]').val(amount_paid + been_payed);
                     $("[name=amount_deficit]").val(
-                        amount_deficit - amount_paid
+                        amount_deficit - amount_paid,
                     );
                 } else if (amount_paid <= amount_deficit) {
                     $("[name=been_payed]").val(amount_paid + been_payed);
                     $("[name=amount_deficit]").val(
-                        amount_deficit - amount_paid
+                        amount_deficit - amount_paid,
                     );
                 } else {
                     setTimeout(function () {
@@ -1899,7 +1901,7 @@ $("#datatable-buttons").on("click", ".viewJob", function (e) {
                     $("#stages").append(
                         '<li class="task_info active" onmouseout="unshow()"  onmouseover="hover(this.id)" id=" ' +
                             _.capitalize(value.task_name) +
-                            ' "> </li>'
+                            ' "> </li>',
                     );
                     bool = true;
                 }
@@ -1908,14 +1910,14 @@ $("#datatable-buttons").on("click", ".viewJob", function (e) {
                         '<li  class="task_info cc active" onmouseout="unshow()" onmouseover="hover(this.id)" id=" ' +
                             _.capitalize(value.task_name) +
                             ' ">' +
-                            "</li>"
+                            "</li>",
                     );
                 } else if (bool) {
                     $("#stages").append(
                         '<li  class="task_info" onmouseout="unshow()" onmouseover="hover(this.id)" id=" ' +
                             _.capitalize(value.task_name) +
                             ' ">' +
-                            "</li>"
+                            "</li>",
                     );
                 }
 
@@ -2061,7 +2063,7 @@ $(".update_con").click(function () {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -2132,7 +2134,7 @@ $(".contactTable").on("click", ".del_cont_firm", function () {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -2250,7 +2252,7 @@ $("#save_con").on("click", function () {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -2322,7 +2324,7 @@ $(".save_changes").on("click", function () {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -2769,24 +2771,24 @@ $("#addMeetingButton").click(function () {
 
 function progress_view(job_request_id) {
     document.getElementById("job_request_id").value = document.getElementById(
-        "job_request" + job_request_id
+        "job_request" + job_request_id,
     ).textContent;
     document.getElementById("tasks_details").value = document.getElementById(
-        "tasks" + job_request_id
+        "tasks" + job_request_id,
     ).textContent;
     document.getElementById("current_task_form").value =
         document.getElementById("current_task" + job_request_id).textContent;
     document.getElementById("current_task_id").value = document.getElementById(
-        "current_task_id" + job_request_id
+        "current_task_id" + job_request_id,
     ).textContent;
     document.getElementById("display_task").innerHTML = document.getElementById(
-        "current_task" + job_request_id
+        "current_task" + job_request_id,
     ).textContent;
     document.getElementById("current_task_form_job_request_id").value =
         document.getElementById(
-            "job_request_id_id" + job_request_id
+            "job_request_id_id" + job_request_id,
         ).textContent;
     document.getElementById("company_email").value = document.getElementById(
-        "company_email" + job_request_id
+        "company_email" + job_request_id,
     ).textContent;
 }
