@@ -19,11 +19,11 @@ class ManagerAdminController extends Controller
     public function viewJobRequests($user)
     {
         $job_requests = Job_Request::join('firmus_jobs', 'job__requests.job_id', 'firmus_jobs.job_id')
-        ->where('firmus_jobs.delete_status', 'NOT DELETED')
-        ->where('job__requests.delete_status', 'NOT DELETED')
-        ->select('job__requests.*')
-        ->latest('created_at')
-        ->get();
+            ->where('firmus_jobs.delete_status', 'NOT DELETED')
+            ->where('job__requests.delete_status', 'NOT DELETED')
+            ->select('job__requests.*')
+            ->latest('created_at')
+            ->get();
         // dd($job_requests);
         $clients = Client::all()->where('delete_status', 'NOT DELETED');
         $jobs = Job::all()->where('delete_status', 'NOT DELETED');
@@ -32,9 +32,9 @@ class ManagerAdminController extends Controller
     }
 
     //    public function viewJobAssignments () {
-//        $jobs = Job_Assignment::all();
-//        return view('manager.jobs', 'jobs');
-//    }
+    //        $jobs = Job_Assignment::all();
+    //        return view('manager.jobs', 'jobs');
+    //    }
 
     public function addJobRequest(Request $request)
     {
@@ -55,8 +55,6 @@ class ManagerAdminController extends Controller
 
         $request_data['hash_check'] = $data_hash;
 
-        dd($prepare_data, $data_hash);
-
         $new_job_added = Job_Request::create($request_data);
         $job_name = DB::table('firmus_jobs')->select('job_name')
             ->where('job_id', $new_job_added->job_id)
@@ -76,7 +74,7 @@ class ManagerAdminController extends Controller
             ->where('delete_status', 'NOT DELETED')
             ->first()
             ->company_name;
-            
+
         return response()->json(['message' => 'success', 'Data_back' => $new_job_added, 'client_info' => $client_name]);
     }
 
@@ -144,10 +142,12 @@ class ManagerAdminController extends Controller
 
             $task_completion_count = Job_Task_Completion::where('job_request_id', $request->input('job_req_id'))->where('task_id', $task_id)->count();
 
-            if ($request->input('jsonData') != "}" && $task_completion_count == 0)
+            info("task completion count ". json_encode($task_completion_count));
 
+            if ($request->input('jsonData') != "}" && $task_completion_count == 0) {
                 Job_Task_Completion::create(['job_request_id' => $request->input('job_req_id'), 'task_id' => $task_id, 'job_assignment_id' => $emp_assignment_id, 'status' => $status, 'comments' => $comments, 'start_date' => Carbon::now(), 'end_date' => Carbon::now()]);
-
+            }
+                
         } else
             return response()->json(['message' => 'error']);
 
@@ -159,7 +159,7 @@ class ManagerAdminController extends Controller
     public function viewJobDetails($id)
     {
         $job = Job_Request::where('job_request_id', $id)->first();
-        $employees = Job_Assignment::where('job_request_id', $id)->get();
+        $employees = Job_Assignment::where('job_request_id', $id)->where('delete_status', 'NOT DELETED')->get();
         return Response::json(View::make('manager.job_details', array('job' => $job, 'employees' => $employees))->render());
     }
 }

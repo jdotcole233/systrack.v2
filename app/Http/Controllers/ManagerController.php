@@ -127,13 +127,44 @@ class ManagerController extends Controller
         ]);
     }
 
-    public function managerMyJobs($user)
+    // public function managerMyJobs($user)
+    // {
+    //     $my_jobs = Job_Assignment::where('emp_id', Auth::user()->emp_id)
+    //         ->where('delete_status', 'NOT DELETED')
+    //         ->orderBy('created_at', 'desc')
+    //         ->get();
+    //     return view('employee.jobs', compact('my_jobs', 'user'));
+    // }
+
+         public function managerMyJobs($user)
     {
-        $my_jobs = Job_Assignment::where('emp_id', Auth::user()->emp_id)
+        $assignments = Job_Assignment::query()
+            ->where('emp_id', Auth::user()->emp_id)
             ->where('delete_status', 'NOT DELETED')
-            ->orderBy('created_at', 'desc')
+            ->whereHas('job_request', fn ($q) => $q->where('delete_status', 'NOT DELETED'))
+            ->with([
+                'assigner:emp_id,first_name,last_name',
+                'job_request.client:client_id,company_name,email',
+                'job_request.job' => fn ($q) => $q->where('delete_status', 'NOT DELETED'),
+                'job_request.job.tasks' => fn ($q) => $q
+                    ->where('delete_status', 'NOT DELETED')
+                    ->orderBy('task_id'), // swap for a `sequence` column if you add one
+                'job_request.job_tasks_completion' => fn ($q) => $q
+                    ->where('delete_status', 'NOT DELETED')
+                    ->orderBy('created_at'),
+                'job_request.completion:job_request_id,end_date',
+                // Only the columns the page needs — never serialize whole employee rows.
+                'job_request.assignees:employees.emp_id,employees.first_name,employees.last_name,employees.company_email',
+            ])
+            ->orderByDesc('created_at')
             ->get();
-        return view('employee.jobs', compact('my_jobs', 'user'));
+ 
+        $jobs = $assignments
+            ->map(fn (Job_Assignment $assignment) => $this->presentAssignment($assignment))
+            ->values();
+ 
+        // $user is still passed through in case employee.my-jobs-template uses it.
+        return view('employee.jobs', compact('jobs', 'user'));
     }
 
     public function managerEmployees($user)
@@ -196,5 +227,74 @@ class ManagerController extends Controller
 
         // return response()->json(["data" => $test, "total" => $total]);
         return view('manager.reports', compact('user', 'report_data'));
+    }
+
+
+        /**
+     * Everything one table row and its modal need, as a plain array.
+     * The view renders from this and the JS reads the same data via @json.
+     */
+    private function presentAssignment(Job_Assignment $assignment): array
+    {
+        $request  = $assignment->job_request;
+        $progress = $request->taskProgress();
+        $current  = $progress['current'];
+        $details  = is_array($request->details) ? $request->details : [];
+        $assigner = $assignment->assigner;
+ 
+        return [
+            'id'                => $request->job_request_id,
+            'assignment_id'     => $assignment->job_assignment_id,
+            'reference'         => $request->reference_number,
+            'job_name'          => $request->job?->job_name ?? '—',
+            'client'            => $request->client?->company_name ?? '—',
+            'client_email'      => $request->client?->email,
+            'email_suggestions' => $this->emailSuggestions($request->client?->email, $details),
+            'assigned_by'       => $assigner ? trim($assigner->first_name . ' ' . $assigner->last_name) : '—',
+            'applicant'         => $details['NAME OF APPLICANT'] ?? $details['APPLICANT NAME'] ?? 'N/A',
+            'assignment_status' => $assignment->assignment_status,
+            'assigned_on'       => $assignment->created_at?->format('d M Y, H:i'),
+            'assigned_on_sort'  => $assignment->created_at?->timestamp,
+            'end_date'          => $this->dateOnly($request->completion?->end_date),
+            'renewal_date'      => $this->dateOnly($request->renewal_date),
+            'current_task'      => $current ? [
+                'id'     => $current->task_id,
+                'name'   => $current->task_name,
+                'status' => $progress['statuses'][$current->task_id] ?? null,
+            ] : null,
+            'is_final_task'     => $progress['is_final'],
+            'is_done'           => $progress['is_done'],
+            'stages'            => $progress['stages'],
+            'assignees'         => $request->assignees
+                ->map(fn ($e) => [
+                    'name'  => trim($e->first_name . ' ' . $e->last_name),
+                    'email' => $e->email,
+                ])
+                ->values()
+                ->all(),
+        ];
+    }
+
+     
+    private function dateOnly($value): ?string
+    {
+        return $value ? Carbon::parse($value)->toDateString() : null;
+    }
+ 
+    /**
+     * Client email on file plus any email addresses found in THIS request's details
+     * (the old code pulled details from every request the client ever made).
+     */
+    private function emailSuggestions(?string $clientEmail, array $details): array
+    {
+        return collect($details)
+            ->flatten()
+            ->filter(fn ($v) => is_string($v) && filter_var(trim($v), FILTER_VALIDATE_EMAIL))
+            ->map(fn ($v) => strtolower(trim($v)))
+            ->prepend($clientEmail ? strtolower($clientEmail) : null)
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
     }
 }

@@ -144,7 +144,7 @@
                         <td>{{$job->job_name}}</td>
                         <td>
                             @if($job->details != null)
-                                @foreach(json_decode($job->details) as $item)
+                                @foreach($job->details as $item)
                                     {{$item.", "}}
                                 @endforeach
                             @endif

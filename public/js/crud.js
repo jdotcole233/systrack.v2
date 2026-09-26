@@ -62,7 +62,7 @@ function addRemove(id) {
         $("#removed_tasks").append(
             '<input class="removed_add" type="hidden" value="' +
                 Number(id) +
-                '"  />'
+                '"  />',
         );
     }
 }
@@ -198,7 +198,7 @@ function displayAdditonalInfo(id, element, value) {
     var details = element.options[element.selectedIndex].id;
     details = JSON.parse(details);
     // element.options[element.selectedIndex].value = details[value];
-    details = JSON.parse(details[id + "s"]);
+    details = details[id + "s"];
     clear(id + "s");
     Object.values(details).forEach(function (value) {
         add(id + "s", value, "");
@@ -253,7 +253,7 @@ $("#save").on("click", function (e) {
                         $.ajaxSetup({
                             headers: {
                                 "X-CSRF-TOKEN": $(
-                                    'meta[name="csrf_token"]'
+                                    'meta[name="csrf_token"]',
                                 ).attr("content"),
                             },
                         });
@@ -335,7 +335,7 @@ $("#addJob").on("click", function (e) {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -358,7 +358,7 @@ $("#addJob").on("click", function (e) {
                         $.ajaxSetup({
                             headers: {
                                 "X-CSRF-TOKEN": $(
-                                    'meta[name="csrf_token"]'
+                                    'meta[name="csrf_token"]',
                                 ).attr("content"),
                             },
                         });
@@ -382,7 +382,7 @@ $("#addJob").on("click", function (e) {
                             error: function (data) {
                                 $("#loading_progress").modal("hide");
                                 console.log(
-                                    "Error sending notifaction for new added job"
+                                    "Error sending notifaction for new added job",
                                 );
                             },
                         });
@@ -496,8 +496,7 @@ $("#addJob").on("click", function (e) {
 //     });
 // });
 
-
-function deleteJob (job) {
+function deleteJob(job) {
     data = job;
     console.log(data);
     delet("job", data, "action");
@@ -513,7 +512,7 @@ function deleteJob (job) {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -528,7 +527,7 @@ function deleteJob (job) {
                     $.ajaxSetup({
                         headers: {
                             "X-CSRF-TOKEN": $('meta[name="csrf_token"]').attr(
-                                "content"
+                                "content",
                             ),
                         },
                     });
@@ -565,7 +564,6 @@ function deleteJob (job) {
     });
 }
 
-
 // .forEach(function (value) {
 //     console.log(value);
 //     if(value.text == document.getElementById('job_id_get').textContent ) {
@@ -584,7 +582,6 @@ $("#submit_job_request").on("click", function (e) {
 
     parses("details");
     var info = JSON.parse($("#jobsMenu").val());
-
 
     // document.getElementById('jobsMenu').options[document.getElementById('jobsMenu').selectedIndex].value = info.job_id;
 
@@ -645,7 +642,7 @@ $("#submit_job_request").on("click", function (e) {
                     $.ajaxSetup({
                         headers: {
                             "X-CSRF-TOKEN": $('meta[name="csrf_token"]').attr(
-                                "content"
+                                "content",
                             ),
                         },
                     });
@@ -675,7 +672,7 @@ $("#submit_job_request").on("click", function (e) {
                 error: function (err) {
                     console.log(err);
                     $("#loading_progress").modal("hide");
-                    swal(err?.responseJSON['message']);
+                    swal(err?.responseJSON?.message || "Something went wrong");
                 },
             });
         } else {
@@ -720,7 +717,7 @@ $("#edit_job_request").on("click", function (e) {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -741,7 +738,7 @@ $("#edit_job_request").on("click", function (e) {
                     $.ajaxSetup({
                         headers: {
                             "X-CSRF-TOKEN": $('meta[name="csrf_token"]').attr(
-                                "content"
+                                "content",
                             ),
                         },
                     });
@@ -769,6 +766,7 @@ $("#edit_job_request").on("click", function (e) {
                     $("#job_request_form").trigger("reset");
                     $("#details").html = "";
                     $("#con-close-modal").modal("hide");
+                    window.location.reload();
                 },
                 error: function () {
                     $("#loading_progress").modal("hide");
@@ -802,7 +800,7 @@ $("#datatable-buttons").on("click", ".deleteJobRequest", function (e) {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -827,7 +825,7 @@ $("#datatable-buttons").on("click", ".deleteJobRequest", function (e) {
                     $.ajaxSetup({
                         headers: {
                             "X-CSRF-TOKEN": $('meta[name="csrf_token"]').attr(
-                                "content"
+                                "content",
                             ),
                         },
                     });
@@ -866,6 +864,8 @@ $("#datatable-buttons").on("click", ".deleteJobRequest", function (e) {
 $("#datatable-buttons").on("click", ".assignJobRequest", function (event) {
     var job_assign_id = $(this).val();
 
+    console.log(job_assign_id, " assigned ");
+
     // var job_assign_url = "/job_assign_retrieve_information/" + job_assign_id;
     var job_assign_url =
         "/manager-jobs/assign_retrieve_information/" + job_assign_id;
@@ -887,12 +887,15 @@ $("#datatable-buttons").on("click", ".assignJobRequest", function (event) {
         dataType: "json",
         url: job_assign_url,
         success: function (data) {
+            console.log(data);
             $("#reference_num").val(data.data_inform.reference_number);
             $("#job_request_id_detail").val(data.data_inform.job_request_id);
             //$("#field-2").append("<option value = '" + data.data_in_job_name.job_name+ "'>" +  data.data_in_job_name.job_name + "</option>");
             $("#field-2").val(data.data_in_job_name);
-            $("#field-3").val(data.data_in_client);
-            $("#field-4").val(data.data_inform.created_at);
+            $("#field-3").val(
+                `${data.data_in_client} - ${data.data_in_applicant}`,
+            );
+            $("#field-4").val(data.data_inform.start_date);
             var tr_info = "";
             $.each(data.employee_details, function (key, value) {
                 tr_info +=
@@ -936,6 +939,7 @@ $("#add_job_gen").on("click", function (e) {
 
 $("#assignJobRequestSend").on("click", function (e) {
     // parses('details');
+
     var jsonData = "{";
     // $('#employeeList tr[class=""]')
     $('#employeeList tr[class=""]').each(function (i, v) {
@@ -980,24 +984,23 @@ $("#assignJobRequestSend").on("click", function (e) {
         assign_job_url = "/employee-jobs/assign";
     }
 
+    console.log("serialize ", $("#job_make_assign_form").serialize());
+
     $.ajax({
         type: "post",
         dataType: "json",
         data: $("#job_make_assign_form").serialize(),
         url: assign_job_url,
         success: function (data) {
-            //swal({title : "Firmus Job Assignment", text : "Job Assigned Successfully", icon : 'success'});
             var ref_no = data.data.reference_number;
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf_token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
-            // var employees = JSON.parse(jsonData);
             var employees = jsonData;
-            console.log("employees ", employees);
             $.each(employees, function (key, value) {
                 $.ajax({
                     method: "POST",
@@ -1042,12 +1045,16 @@ $("#assignJobRequestSend").on("click", function (e) {
                     },
                 });
             });
-            $("#job_make_assign_form").trigger("reset");
 
+            window.location.reload();
+            $("#job_make_assign_form").trigger("reset");
             $("#custom-width-modal").modal("hide");
+
+            window.location.reload();
         },
-        error: function () {
-            swal("error");
+        error: function (err) {
+            swal(err.responseText);
+            // window.location.reload();
             // console.log("error");
         },
     });
@@ -1059,7 +1066,7 @@ function filldatalist(prefix) {
         for (i = 0; i < optionsarray.length; i++) {
             if (prefix.indexOf(optionsarray[i]) < 0) {
                 datalist.append(
-                    '<option value="' + prefix + optionsarray[i] + '">'
+                    '<option value="' + prefix + optionsarray[i] + '">',
                 );
             }
         }
@@ -1072,18 +1079,17 @@ function filldatalist(prefix) {
 // var eDatalist;
 
 $(".progress_button").on("click", function () {
-    JSON.parse($("#job_request_contact_information").val()).forEach(function (
-        value,
-        key
-    ) {
-        $("#clientsEmail").append(
-            "<option value=" +
-                JSON.parse(value.details)["EMAIL"] +
-                ">" +
-                JSON.parse(value.details)["COMPANY NAME"] +
-                "</option>"
-        );
-    });
+    JSON.parse($("#job_request_contact_information").val()).forEach(
+        function (value, key) {
+            $("#clientsEmail").append(
+                "<option value=" +
+                    JSON.parse(value.details)["EMAIL"] +
+                    ">" +
+                    JSON.parse(value.details)["COMPANY NAME"] +
+                    "</option>",
+            );
+        },
+    );
 
     datalist = jQuery("datalist");
     options = jQuery("datalist option");
@@ -1095,42 +1101,46 @@ $(".progress_button").on("click", function () {
     var details = JSON.parse($("#job_request_id").val());
     var tasks_details = JSON.parse($("#tasks_details").val());
 
+    console.log("task details ", tasks_details);
+
     $("#assigned_employees").html("");
     details.forEach(function (value, key) {
         $("#assigned_employees").append(
-            "<tr><td>" + value.first_name + " " + value.last_name + "</td></tr>"
+            "<tr><td>" +
+                value.first_name +
+                " " +
+                value.last_name +
+                "</td></tr>",
         );
     });
 
+    var currentTask = $("#current_task_form").val().trim();
+    var reachedCurrent = false;
+
     $("#stages").html("");
-    var i = 0;
-    var bool = false;
     tasks_details.forEach(function (value, key) {
-        if ($("#current_task_form").val().trim() == value.task_name.trim()) {
-            $("#stages").append(
-                '<li class="task_info active" onmouseout="unshow()"  onmouseover="hover(this.id)" id=" ' +
-                    _.capitalize(value.task_name) +
-                    ' "> </li>'
-            );
-            bool = true;
-        } else if (!bool) {
-            $("#stages").append(
-                '<li  class="task_info cc active" onmouseout="unshow()" onmouseover="hover(this.id)" id=" ' +
-                    _.capitalize(value.task_name) +
-                    ' ">' +
-                    "</li>"
-            );
-        } else if (bool) {
-            $("#stages").append(
-                '<li  class="task_info" onmouseout="unshow()" onmouseover="hover(this.id)" id=" ' +
-                    _.capitalize(value.task_name) +
-                    ' ">' +
-                    "</li>"
-            );
+        var name = value.task_name.trim();
+        var cls;
+
+        if (name === currentTask) {
+            cls = "task_info active"; // current task
+            reachedCurrent = true;
+        } else if (!reachedCurrent) {
+            cls = "task_info cc active"; // completed (before current)
+        } else {
+            cls = "task_info"; // upcoming (after current)
         }
 
-        i++;
+        $("#stages").append(
+            $("<li>", {
+                class: cls,
+                id: _.capitalize(name),
+                onmouseover: "hover(this.id)",
+                onmouseout: "unshow()",
+            }),
+        );
     });
+
 
     var row_id = "#" + $(this).parent().parent().attr("id") + " td";
     $(row_id).each(function (i, v) {
@@ -1141,7 +1151,7 @@ $(".progress_button").on("click", function () {
     var job_assignment_id = $(this).parent().parent().attr("id");
     job_assignment_id = job_assignment_id.substring(
         3,
-        job_assignment_id.length
+        job_assignment_id.length,
     );
 
     $("#task_job_assignment_id").val(job_assignment_id);
@@ -1167,14 +1177,15 @@ $("#alt_email").on("change paste keyup", function () {
 });
 
 $(".close_clear").click(function () {
+    window.location.reload();
     clearInterval(intervalMessage);
 });
 
-$('#send_email_notification').click(function () {
-    if ($(this).is(':checked')) {
-        $('#email_section').show();
+$("#send_email_notification").click(function () {
+    if ($(this).is(":checked")) {
+        $("#email_section").show();
     } else {
-        $('#email_section').hide();
+        $("#email_section").hide();
     }
 });
 
@@ -1182,7 +1193,7 @@ $("#sendTasksUpdate").click(function () {
     // $('#client_remark').val($('#current_task_form').val());
     $("#renewal_date_o").val($("#renewal_date_proxy").val());
     // $('#client_remark').val($('#current_task_form').val());
-    let send_email_option = $('#send_email_notification').is(':checked');
+    let send_email_option = $("#send_email_notification").is(":checked");
 
     if ($("#field-5").val() == " ") {
         $("#field-5").css("border", "1px solid red");
@@ -1190,20 +1201,20 @@ $("#sendTasksUpdate").click(function () {
     } else if ($("#client_remarks").val() == "") {
         $("#client_remarks").css("border", "1px solid red");
         return;
-    } else if ($("#alt_email").val() == "") {
+    } else if (send_email_option && $("#alt_email").val() == "") {
         $("#alt_email").css("border", "1px solid red");
         return;
     }
 
     var client_email = $("#alt_email").val();
 
-    if ($("#alt_email").val() == "") {
-        client_email = "abcd@firmus.com";
-    }
+    // if ($("#alt_email").val() == "") {
+    //     client_email = "abcd@firmus.com";
+    // }
 
     swal({
         title: "Task Update",
-        text: `Attempting updating status of this task\nAn email notification will be sent ${client_email}`,
+        text: `Attempting updating status of this task\n${send_email_option ? `An email notification will be sent ${client_email}` : ""}`,
         icon: "warning",
         buttons: true,
         dangerMode: true,
@@ -1213,7 +1224,7 @@ $("#sendTasksUpdate").click(function () {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -1235,7 +1246,7 @@ $("#sendTasksUpdate").click(function () {
                         $.ajaxSetup({
                             headers: {
                                 "X-CSRF-TOKEN": $(
-                                    'meta[name="csrf_token"]'
+                                    'meta[name="csrf_token"]',
                                 ).attr("content"),
                             },
                         });
@@ -1324,7 +1335,7 @@ $("#enter_meeting").on("click", function (e) {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -1346,7 +1357,7 @@ $("#enter_meeting").on("click", function (e) {
                     $.ajaxSetup({
                         headers: {
                             "X-CSRF-TOKEN": $('meta[name="csrf_token"]').attr(
-                                "content"
+                                "content",
                             ),
                         },
                     });
@@ -1406,7 +1417,7 @@ function emp_remove(id) {
                 id +
                 '" class="job_assignment_id" type="hidden" value="' +
                 class_job_assingment_id +
-                '"  />'
+                '"  />',
         );
         // console.log('done');
     }
@@ -1495,20 +1506,19 @@ $("#update_btn_minutes").click(function () {
 
     var old_employee = "{";
 
-    $('#invited_employees tr[class="remove_them_moimoi"]').each(function (
-        i,
-        v
-    ) {
-        var string = $(this).attr("id");
-        var name_attendee = $(this).attr("name");
-        try {
-            var id = string.substring(5, string.length);
-        } catch (exception) {
-            return;
-        }
+    $('#invited_employees tr[class="remove_them_moimoi"]').each(
+        function (i, v) {
+            var string = $(this).attr("id");
+            var name_attendee = $(this).attr("name");
+            try {
+                var id = string.substring(5, string.length);
+            } catch (exception) {
+                return;
+            }
 
-        old_employee += '"' + id + '" : ' + '"' + name_attendee + '", ';
-    });
+            old_employee += '"' + id + '" : ' + '"' + name_attendee + '", ';
+        },
+    );
 
     old_employee =
         old_employee.substring(0, old_employee.lastIndexOf(",")) + "}";
@@ -1525,7 +1535,7 @@ $("#update_btn_minutes").click(function () {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -1556,7 +1566,7 @@ $("#update_btn_minutes").click(function () {
                     $.ajaxSetup({
                         headers: {
                             "X-CSRF-TOKEN": $('meta[name="csrf_token"]').attr(
-                                "content"
+                                "content",
                             ),
                         },
                     });
@@ -1665,7 +1675,7 @@ $("#update_btn_minutes").click(function () {
                                         console.log("error");
                                     },
                                 });
-                            }
+                            },
                         );
                     }
 
@@ -1739,7 +1749,7 @@ $(".cancel_meeting").click(function (e) {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -1760,7 +1770,7 @@ $(".cancel_meeting").click(function (e) {
                     $.ajaxSetup({
                         headers: {
                             "X-CSRF-TOKEN": $('meta[name="csrf_token"]').attr(
-                                "content"
+                                "content",
                             ),
                         },
                     });
@@ -1843,7 +1853,7 @@ $("#pay_btn").on("click", function (e) {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -1859,12 +1869,12 @@ $("#pay_btn").on("click", function (e) {
                     $("[name=job_cost]").val(job_cost - amount_paid);
                     // $('[name=been_payed]').val(amount_paid + been_payed);
                     $("[name=amount_deficit]").val(
-                        amount_deficit - amount_paid
+                        amount_deficit - amount_paid,
                     );
                 } else if (amount_paid <= amount_deficit) {
                     $("[name=been_payed]").val(amount_paid + been_payed);
                     $("[name=amount_deficit]").val(
-                        amount_deficit - amount_paid
+                        amount_deficit - amount_paid,
                     );
                 } else {
                     setTimeout(function () {
@@ -1959,41 +1969,36 @@ $("#datatable-buttons").on("click", ".viewJob", function (e) {
         dataType: "json",
         url: job_details_url,
         success: function (data) {
+            console.log(data);
             $("#job_details_info").html(data);
             var tasks_details = JSON.parse($("#tasks_details").val());
+            console.log(tasks_details);
+
+            var currentTask = $("#current_task_form").val().trim();
+            var reachedCurrent = false;
 
             $("#stages").html("");
-            var i = 0;
-            var bool = false;
             tasks_details.forEach(function (value, key) {
-                if (
-                    $("#current_task_form").val().trim() ==
-                    value.task_name.trim()
-                ) {
-                    $("#stages").append(
-                        '<li class="task_info active" onmouseout="unshow()"  onmouseover="hover(this.id)" id=" ' +
-                            _.capitalize(value.task_name) +
-                            ' "> </li>'
-                    );
-                    bool = true;
-                }
-                if (!bool) {
-                    $("#stages").append(
-                        '<li  class="task_info cc active" onmouseout="unshow()" onmouseover="hover(this.id)" id=" ' +
-                            _.capitalize(value.task_name) +
-                            ' ">' +
-                            "</li>"
-                    );
-                } else if (bool) {
-                    $("#stages").append(
-                        '<li  class="task_info" onmouseout="unshow()" onmouseover="hover(this.id)" id=" ' +
-                            _.capitalize(value.task_name) +
-                            ' ">' +
-                            "</li>"
-                    );
+                var name = value.task_name.trim();
+                var cls;
+
+                if (name === currentTask) {
+                    cls = "task_info active"; // current task
+                    reachedCurrent = true;
+                } else if (!reachedCurrent) {
+                    cls = "task_info cc active"; // completed (before current)
+                } else {
+                    cls = "task_info"; // upcoming (after current)
                 }
 
-                i++;
+                $("#stages").append(
+                    $("<li>", {
+                        class: cls,
+                        id: _.capitalize(name),
+                        onmouseover: "hover(this.id)",
+                        onmouseout: "unshow()",
+                    }),
+                );
             });
 
             intervalMessage = setInterval(getMessages, 1000);
@@ -2135,7 +2140,7 @@ $(".update_con").click(function () {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -2206,7 +2211,7 @@ $(".contactTable").on("click", ".del_cont_firm", function () {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -2324,7 +2329,7 @@ $("#save_con").on("click", function () {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -2396,7 +2401,7 @@ $(".save_changes").on("click", function () {
             $.ajaxSetup({
                 headers: {
                     "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-                        "content"
+                        "content",
                     ),
                 },
             });
@@ -2843,24 +2848,24 @@ $("#addMeetingButton").click(function () {
 
 function progress_view(job_request_id) {
     document.getElementById("job_request_id").value = document.getElementById(
-        "job_request" + job_request_id
+        "job_request" + job_request_id,
     ).textContent;
     document.getElementById("tasks_details").value = document.getElementById(
-        "tasks" + job_request_id
+        "tasks" + job_request_id,
     ).textContent;
     document.getElementById("current_task_form").value =
         document.getElementById("current_task" + job_request_id).textContent;
     document.getElementById("current_task_id").value = document.getElementById(
-        "current_task_id" + job_request_id
+        "current_task_id" + job_request_id,
     ).textContent;
     document.getElementById("display_task").innerHTML = document.getElementById(
-        "current_task" + job_request_id
+        "current_task" + job_request_id,
     ).textContent;
     document.getElementById("current_task_form_job_request_id").value =
         document.getElementById(
-            "job_request_id_id" + job_request_id
+            "job_request_id_id" + job_request_id,
         ).textContent;
     document.getElementById("company_email").value = document.getElementById(
-        "company_email" + job_request_id
+        "company_email" + job_request_id,
     ).textContent;
 }

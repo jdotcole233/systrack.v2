@@ -1,16 +1,18 @@
 <?php
- $job_id = DB::table('firmus_jobs')->join('job__requests','firmus_jobs.job_id','=','job__requests.job_id')->where('job_request_id',$job->job_request_id)->where('firmus_jobs.delete_status', 'NOT DELETED')->value('firmus_jobs.job_id');
-$s = DB::table('job__task__completions')->where('job_request_id',$job->job_request_id)->where('delete_status', 'NOT DELETED')->orderBy('created_at','desc')->first();
-//dd($s);
     if($s != null) {
-        $task = DB::table('tasks')->where('task_id', $s->task_id + 1)->first();
+        $task = DB::table('tasks')
+            ->where('job_id', $job->job_id)
+            ->where('delete_status', 'NOT DELETED')
+            ->whereNotIn('task_id', $completed_tasks)
+            ->orderBy('task_id')
+            ->first();        
     }
 ?>
 @if($s != null)
-<input id="tasks_details" type="hidden" style="display: none" value="{{DB::table('tasks')->where('job_id', $job_id)->where('delete_status', 'NOT DELETED')->get()}}">
-<input type="hidden" name="" id="current_task_form" value="{{$task->task_name}}">
+<input id="tasks_details" type="hidden" style="display: none" value="{{DB::table('tasks')->where('job_id', $job->job_id)->where('delete_status', 'NOT DELETED')->get()}}">
+<input type="hidden" name="" id="current_task_form" value="{{$task->task_name ?? ''}}">
 <div class="row">
-    <center><label  id="display_task" class="form-control">{{$task->task_name}}</label></center>
+    <center><label  id="display_task" class="form-control">{{$task->task_name ?? '' }}</label></center>
 </div>
 @endif
 <div class="row">
@@ -46,7 +48,7 @@ $s = DB::table('job__task__completions')->where('job_request_id',$job->job_reque
 <div class="col-md-4">
     <div class="form-group">
         <label for="field-2" class="control-label">Client</label>
-        <input name="client_id2" value="{{ DB::table('clients')->select('company_name')->where('client_id', $job->client_id)->where('delete_status', 'NOT DELETED')->first()->company_name}}" type="text" class="form-control" id="field-3" readonly>
+        <input name="client_id2" value="{{ DB::table('clients')->select('company_name')->where('client_id', $job->client_id)->where('delete_status', 'NOT DELETED')->first()->company_name ?? '' }}" type="text" class="form-control" id="field-3" readonly>
     </div>
 </div>
 <div class="col-md-6">
@@ -83,12 +85,18 @@ $s = DB::table('job__task__completions')->where('job_request_id',$job->job_reque
     <div class="col-md-12">
         <h4>Assigned Employee(s)</h4>
         <table class="table table-responsive table-striped" id="employeeList">
-            @foreach($employees as $employee)
-                <tr>
-                    <td>{{DB::table('employees')->where('emp_id', $employee->emp_id)->value('first_name')}} {{DB::table('employees')->where('emp_id', $employee->emp_id)->value('last_name')}}</td>
-                    <td> </td>
-                </tr>
-            @endforeach
+            {{-- @if (count($employees) > 0) 
+                @foreach($employees as $employee)
+                    <tr>
+                        <td>{{DB::table('employees')->where('emp_id', $employee->emp_id)->value('first_name')}} {{DB::table('employees')->where('emp_id', $employee->emp_id)->value('last_name')}}</td>
+                        <td> </td>
+                    </tr>
+                @endforeach
+            @else
+            <tr>
+                <td>No staff assigned yet</td>
+            </tr>
+            @endif --}}
         </table>
     </div>
 </div>

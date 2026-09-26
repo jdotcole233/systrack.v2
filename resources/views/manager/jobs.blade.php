@@ -78,25 +78,6 @@
                                     </div>
                                 </div>
 
-                                <!-- <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="field-2" class="control-label">Cost</label>
-                                        <input name="job_cost" type="text" class="form-control" id="field-1" placeholder="Cost">
-                                    </div>
-                                </div>
-
-                                <div class="col-md-6">
-                                    <div class="form-group">
-                                        <label for="field-2" class="control-label">Job Priority</label>
-                                        <select name="job_priority" class="form-control" id="jobsMenu">
-                                            <option value="LOW">Low</option>
-                                            <option value="MEDIUM">Medium</option>
-                                            <option value="HIGH">High</option>
-                                            <option value="VERY HIGH">Very High</option>
-                                        </select>
-                                    </div>
-                                </div> -->
-
                                 <div class="col-md-12" style="display: none">
                                     <div class="form-group">
                                         <label for="detail" class="control-label">Details</label>
@@ -125,7 +106,7 @@
                                     <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="field-1" class="control-label">Start Date</label>
-                                            <input name="job_request_start_date" type="date" class="form-control" id="job_request_start_date" required>
+                                            <input name="start_date" type="date" class="form-control" id="job_request_start_date" required>
                                         </div>
                                     </div>
                                 </div>
@@ -381,7 +362,7 @@
                         <tbody>
                             @foreach($job_requests as $job_request)
                             <?php
-                            $employees = App\Models\Job_Assignment::where('job_request_id', $job_request->job_request_id)->get();
+                            $employees = App\Models\Job_Assignment::where('job_request_id', $job_request->job_request_id)->where('delete_status', 'NOT DELETED')->get();
                             ?>
                             <tr id="Job{{$job_request->job_request_id}}">
                                 <td>{{$job_request->reference_number}}</td>
@@ -405,7 +386,7 @@
                                     @endforeach
                                 </td>
                                 <!-- <td class="status">{{$job_request->status}}</td> -->
-                                <td>{{$job_request->created_at}}</td>
+                                <td>{{$job_request->start_date}}</td>
                                 <td><button data-toggle="modal" data-target="#view-custom-width-modal" type="button" id="view_job_details" class=" viewJob btn btn-success waves-effect waves-danger " value="{{$job_request->job_request_id}}">View Job</button></td>
                                 <td><button type="button" class="btn btn-warning waves-effect waves-warning edit_job_request" data-toggle="modal" data-target="#con-close-modal" onclick="document.getElementById('submit_job_request').style.display = 'none'; document.getElementById('edit_job_request').style.display = 'block'; edit('job_request_form',{{$job_request}}, '{{route('editJobRequest')}}');">Edit</button></td>
                                 @if($job_request->status != 'PENDING')

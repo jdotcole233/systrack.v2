@@ -17,7 +17,7 @@ use App\Models\{
 };
 use App\Utilities\Utilities;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\{Auth, DB, Hash, Mail, Response, View};
+use Illuminate\Support\Facades\{Auth, DB, Hash, Log, Mail, Response, View};
 use Carbon\Carbon;
 
 class EmployeeController extends Controller
@@ -27,13 +27,131 @@ class EmployeeController extends Controller
         $this->middleware(middleware: 'employee');
     }
 
-    public function employeeJobs($user)
+    // public function employeeJobs($user)
+    // {
+    //     // $my_jobs = Job_Assignment::with(['job_request.job_tasks_completion', 'job_request.latest_job_task_completion'])
+    //     //     ->where('emp_id', Auth::user()->emp_id)
+    //     //     ->where('delete_status', 'NOT DELETED')
+    //     //     ->orderBy('created_at', 'desc')
+    //     //     ->get();
+
+    //      $myJobs = Job_Assignment::query()
+    //     ->where('emp_id', Auth::user()->emp_id)
+    //     ->where('delete_status', 'NOT DELETED')
+    //     ->whereHas('job_request', fn ($q) => $q->where('delete_status', 'NOT DELETED'))
+    //     ->with([
+    //         'assigner:emp_id,first_name,last_name',
+    //         'job_request.client:client_id,company_name,email',
+    //         'job_request.job.tasks' => fn ($q) => $q->where('delete_status', 'NOT DELETED')
+    //                                                ->orderBy('task_id'), // ideally a `sequence` column
+    //         'job_request.latestCompletedTask',   // hasOne ... ofMany, status = completed
+    //         'job_request.completion:job_request_id,end_date',
+    //         'job_request.assignees:emp_id,first_name,last_name,email', // only safe columns
+    //     ])
+    //     ->latest()
+    //     ->get();
+
+
+    //     return view('employee.jobs', compact('my_jobs', 'user'));
+    // }
+
+     public function employeeJobs($user)
     {
-        $my_jobs = Job_Assignment::with(['job_request'])->where('emp_id', Auth::user()->emp_id)
+        $assignments = Job_Assignment::query()
+            ->where('emp_id', Auth::user()->emp_id)
             ->where('delete_status', 'NOT DELETED')
-            ->orderBy('created_at', 'desc')
+            ->whereHas('job_request', fn ($q) => $q->where('delete_status', 'NOT DELETED'))
+            ->with([
+                'assigner:emp_id,first_name,last_name',
+                'job_request.client:client_id,company_name,email',
+                'job_request.job' => fn ($q) => $q->where('delete_status', 'NOT DELETED'),
+                'job_request.job.tasks' => fn ($q) => $q
+                    ->where('delete_status', 'NOT DELETED')
+                    ->orderBy('task_id'), // swap for a `sequence` column if you add one
+                'job_request.job_tasks_completion' => fn ($q) => $q
+                    ->where('delete_status', 'NOT DELETED')
+                    ->orderBy('created_at'),
+                'job_request.completion:job_request_id,end_date',
+                // Only the columns the page needs — never serialize whole employee rows.
+                'job_request.assignees:employees.emp_id,employees.first_name,employees.last_name,employees.company_email',
+            ])
+            ->orderByDesc('created_at')
             ->get();
-        return view('employee.jobs', compact('my_jobs', 'user'));
+ 
+        $jobs = $assignments
+            ->map(fn (Job_Assignment $assignment) => $this->presentAssignment($assignment))
+            ->values();
+ 
+        // $user is still passed through in case employee.my-jobs-template uses it.
+        return view('employee.jobs', compact('jobs', 'user'));
+    }
+
+
+      /**
+     * Everything one table row and its modal need, as a plain array.
+     * The view renders from this and the JS reads the same data via @json.
+     */
+    private function presentAssignment(Job_Assignment $assignment): array
+    {
+        $request  = $assignment->job_request;
+        $progress = $request->taskProgress();
+        $current  = $progress['current'];
+        $details  = is_array($request->details) ? $request->details : [];
+        $assigner = $assignment->assigner;
+ 
+        return [
+            'id'                => $request->job_request_id,
+            'assignment_id'     => $assignment->job_assignment_id,
+            'reference'         => $request->reference_number,
+            'job_name'          => $request->job?->job_name ?? '—',
+            'client'            => $request->client?->company_name ?? '—',
+            'client_email'      => $request->client?->email,
+            'email_suggestions' => $this->emailSuggestions($request->client?->email, $details),
+            'assigned_by'       => $assigner ? trim($assigner->first_name . ' ' . $assigner->last_name) : '—',
+            'applicant'         => $details['NAME OF APPLICANT'] ?? $details['APPLICANT NAME'] ?? 'N/A',
+            'assignment_status' => $assignment->assignment_status,
+            'assigned_on'       => $assignment->created_at?->format('d M Y, H:i'),
+            'assigned_on_sort'  => $assignment->created_at?->timestamp,
+            'end_date'          => $this->dateOnly($request->completion?->end_date),
+            'renewal_date'      => $this->dateOnly($request->renewal_date),
+            'current_task'      => $current ? [
+                'id'     => $current->task_id,
+                'name'   => $current->task_name,
+                'status' => $progress['statuses'][$current->task_id] ?? null,
+            ] : null,
+            'is_final_task'     => $progress['is_final'],
+            'is_done'           => $progress['is_done'],
+            'stages'            => $progress['stages'],
+            'assignees'         => $request->assignees
+                ->map(fn ($e) => [
+                    'name'  => trim($e->first_name . ' ' . $e->last_name),
+                    'email' => $e->email,
+                ])
+                ->values()
+                ->all(),
+        ];
+    }
+ 
+    private function dateOnly($value): ?string
+    {
+        return $value ? Carbon::parse($value)->toDateString() : null;
+    }
+ 
+    /**
+     * Client email on file plus any email addresses found in THIS request's details
+     * (the old code pulled details from every request the client ever made).
+     */
+    private function emailSuggestions(?string $clientEmail, array $details): array
+    {
+        return collect($details)
+            ->flatten()
+            ->filter(fn ($v) => is_string($v) && filter_var(trim($v), FILTER_VALIDATE_EMAIL))
+            ->map(fn ($v) => strtolower(trim($v)))
+            ->prepend($clientEmail ? strtolower($clientEmail) : null)
+            ->filter()
+            ->unique()
+            ->values()
+            ->all();
     }
 
     public function employeeIndex()
@@ -119,6 +237,11 @@ class EmployeeController extends Controller
             ->where('delete_status', 'NOT DELETED')
             ->orderBy('created_at', 'desc')
             ->get();
+
+        Log::alert("client", [
+            'client' => $client_info
+        ]);
+
         $current_date = Carbon::now();
         $last_month = Carbon::now()->subDays(30);
         $new_client_information = Client::whereBetween('created_at', [$last_month->toDateTimeString(), $current_date->toDateTimeString()])->where('delete_status', 'NOT DELETED')->get();
@@ -238,10 +361,17 @@ class EmployeeController extends Controller
 
         foreach ($employees as $employee) {
             $employee_details[$employee->emp_id] = DB::table('employees')->where('emp_id', $employee->emp_id)->value('first_name') . ' ' . DB::table('employees')->where('emp_id', $employee->emp_id)->value('last_name');
-            $job_assignment_details[$employee->emp_id] = Job_Assignment::where('job_request_id', $id)->where('emp_id', $employee->emp_id)->value('job_assignment_id');
+            $job_assignment_details[$employee->emp_id] = Job_Assignment::where('job_request_id', $id)->where('delete_status', 'NOT DELETED')->where('emp_id', $employee->emp_id)->value('job_assignment_id');
         }
 
-        return response()->json(['data_inform' => $job_assignment, 'data_in_job_name' => $job_name, 'data_in_client' => $client_name, 'employee_details' => $employee_details, 'job_assignment_details' => $job_assignment_details]);
+        return response()->json([
+            'data_inform' => $job_assignment,
+            'data_in_job_name' => $job_name,
+            'data_in_client' => $client_name,
+            'employee_details' => $employee_details,
+            'job_assignment_details' => $job_assignment_details,
+            'data_in_applicant' => $job_assignment->applicant_name
+        ]);
     }
 
 
@@ -309,8 +439,10 @@ class EmployeeController extends Controller
 
     public function viewJobDetails($id)
     {
-        $job = Job_Request::where('job_request_id', $id)->first();
-        $employees = Job_Assignment::where('job_request_id', $id)->get();
-        return Response::json(View::make('employee.job_details', array('job' => $job, 'employees' => $employees))->render());
+        $job = Job_Request::with(['latest_job_task_completion', 'job_tasks_completion', 'job_assignment'])->where('job_request_id', $id)->first();
+        $completed_tasks = collect($job->job_tasks_completion)->pluck('task_id');
+        $s = $job->latest_job_task_completion;
+
+        return Response::json(View::make('employee.job_details', array('job' => $job, 's' => $s, 'completed_tasks' => $completed_tasks))->render());
     }
 }

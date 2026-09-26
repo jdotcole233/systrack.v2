@@ -40,7 +40,7 @@ $s = DB::table('job__task__completions')->where('job_request_id',$job->job_reque
 <div class="col-md-4">
     <div class="form-group">
         <label for="field-2" class="control-label">Job Title</label>
-        <input name="job_id2" type="text" value="{{ DB::table('jobs')->select('job_name')->where('job_id', $job->job_id)->where('delete_status', 'NOT DELETED')->first()->job_name}}" class="form-control" id="field-2" readonly>
+        <input name="job_id2" type="text" value="{{ DB::table('firmus_jobs')->select('job_name')->where('job_id', $job->job_id)->where('delete_status', 'NOT DELETED')->first()->job_name}}" class="form-control" id="field-2" readonly>
     </div>
 </div>
 <div class="col-md-4">
@@ -52,7 +52,7 @@ $s = DB::table('job__task__completions')->where('job_request_id',$job->job_reque
 <div class="col-md-6">
     <div class="form-group">
         <label for="field-2" class="control-label">Start Date</label>
-        <input type="text" value="{{$job->created_at}}" class="form-control" value="" id="field-4" readonly>
+        <input type="text" value="{{$job->start_date}}" class="form-control" value="" id="field-4" readonly>
     </div>
 </div>
 {{--<div class="col-md-6">--}}
@@ -83,12 +83,18 @@ $s = DB::table('job__task__completions')->where('job_request_id',$job->job_reque
     <div class="col-md-12">
         <h4>Assigned Employee(s)</h4>
         <table class="table table-responsive table-striped" id="employeeList">
+           @if (count($employees) > 0) 
             @foreach($employees as $employee)
                 <tr>
                     <td>{{DB::table('employees')->where('emp_id', $employee->emp_id)->value('first_name')}} {{DB::table('employees')->where('emp_id', $employee->emp_id)->value('last_name')}}</td>
                     <td> </td>
                 </tr>
             @endforeach
+            @else
+            <tr>
+                <td>No staff assigned yet</td>
+            </tr>
+            @endif
         </table>
     </div>
 </div>
